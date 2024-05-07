@@ -1,0 +1,9 @@
+body {
+  font-family: poppins;
+  background-color: aliceblue;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
