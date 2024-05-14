@@ -80,3 +80,26 @@ Link{
   text-decoration: none;
   list-style: none;
 }
+
+
+/* 
+@media only screen and (max-width: 600px) {
+  .navbar {
+    background-color: red;
+  }
+ .nav-logo p {
+  color: #171717;
+  font-size: 20px;
+  font-weight: 600;
+}
+.nav-menu {
+ 
+  gap: 8px;
+  color: #626262;
+
+}
+.nav-logo img{
+  height: 60px;
+  width: 60px;
+}
+} */

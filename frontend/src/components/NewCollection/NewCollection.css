@@ -25,3 +25,18 @@
  gap: 20px;
 }
 
+
+@media only screen and (max-width: 512px) {
+.new-collections h1 {
+  color: #171717;
+  font-size: 30px;
+  font-weight: 600;
+}
+.collections {
+ display: grid;
+ grid-template-columns: auto  ;
+ gap: 20px;
+ margin: 12px;
+}
+  
+}

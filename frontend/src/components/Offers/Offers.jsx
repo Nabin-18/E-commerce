@@ -12,8 +12,7 @@ function Offers() {
                 <p>ONLY FOR BEST SELLERS PRODUCTS</p>
                 <button>Check Now</button>
             </div>
-            <div className="offers-right">
-            </div>
+           
             <div className="offers-right">
                 <img src={exclusive_image} alt="" />
                 </div>
