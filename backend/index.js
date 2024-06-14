@@ -1,134 +1,161 @@
 const port = 4000;
 const express = require('express');
 const app = express();
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const multer = require('multer');
-const path = require('path');
-const cors = require('cors');
-const e = require('express');
-const { type } = require('os');
+const mongoose = require("mongoose")
+const jwt = require("jsonwebtoken");
+const multer = require("multer")
+const path = require("path")
+const cors = require("cors");
+const { v4: uuidv4 } = require('uuid');
+const { connect } = require('http2');
+// const bodyParser = require("body-parser")
+// initilized all the modules 
+
 app.use(express.json());
 app.use(cors());
+// it is used to connectwith express 
 
-//Database connection with MongoDb
-mongoose.connect("mongodb+srv://sg551666:9816156109@cluster0.tteekzl.mongodb.net/e-commerce");
+//  now for monogodb, Data base connection
 
-//API creation
+const uri = ("mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
 
-app.get('/', (req, res) => {
-    res.send("Express App is Running");
-});
+mongoose.connect(uri);
 
-// Image Storage Engine
+//body parser  or middleware to solve validation path error in mongoose
 
+
+app.use(express.urlencoded({ extended: false }));
+
+
+//api creation
+
+app.get("/", (req, res) => {
+    res.send("Express app is running ")
+})
+//Image storage engine using multer 
 const storage = multer.diskStorage({
-    destination: './upload/images',
-    filename: (req, file, cb) =>{
-        return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`);
+    destination: (req, file, cb) => {
+        cb(null, 'upload/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
 });
 
-const upload = multer({ storage: storage});
+const upload = multer({ storage: storage })
 
-// Creating Upload Endpoint for Images
-app.use('/images', express.static('/upload/images'));
+//creating upload endpoint images
 
-app.post("/upload", upload.single('product'),(req, res) => {
-    res.json({
-        success: 1,
-        image_url: `http://localhost:${port}/images/${req.file.filename}`
-    })
+// app.use('/images', express.static('upload/images'))
+
+// app.post("/upload", upload.single('product'), (req, res) => {
+//     res.json({
+//         success: 1,
+//         image_url: `http:localhost:${port}/image/${req.file.filename}`
+//     })
+// })
+
+app.post('/upload', upload.single('file'), (req, res) => {
+
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+    res.send(`File uploaded successfully: ${req.file.filename}`);
 });
 
-// Schema for creating Products
+app.get('/upload', (req, res) => {
+    res.send(`
+    <h2>File Upload using Multer</h2>
+    <form action="/upload" enctype="multipart/form-data" method="POST">
+      <input type="file" name="file" />
+      <button type="submit">Upload</button>
+    </form>
+  `);
+});
 
-const Product = mongoose.model("Product",{
-    id:{
-        type: Number,
-        require: true
-    },
-    name:{
-        type: String,
-        require: true
-    },
-    image:{
-        type: String,
-        require: true
-    },
-    category:{
-        type: String,
-        require: true
-    },
-    new_price:{
-        type: Number,
-        require: true
-    },
-    old_price:{
-        type: Number,
-        require: true
-    },
-    date:{
-        type: Date,
-        default: Date.now
-    },
-    available:{
-        type: Boolean,
-        default: true
-    },
+
+
+//schema for creating products 
+//for the database to store the data
+
+const Product = mongoose.model("product", {
+    "name": { type: String, required: true },
+    "category": { type: String, required: true },
+    "new_price": { type: String, required: true },
+    "old_price": { type: String, required: true },
+    "description": { type: String, required: true },
+    "image": { type: String, required: true },
+    "id": { type: String, required: true },
+    "date": { type: Date, default: Date.now },
+    "available": { type: Boolean, default: true }
+
+
 })
 
-app.post('/addproduct',async(req, res) => {
-    let products = await Product.find({});
-    let id;
-    if(products.length >0)
-        {
-            let last_product_array = products.slice(-1);
-            let last_product = last_product_array[0];
-            id = last_product.id+1;
-        }
-    else{
-        id = 1;
-    }    
+
+app.post("/addproduct", async (req, res) => {
+
+    const productId = uuidv4();
     const product = new Product({
-        id: id,
+        id: productId,
         name: req.body.name,
         image: req.body.image,
         category: req.body.category,
         new_price: req.body.new_price,
-        old_price: req.body.old_price,    
+        old_price: req.body.old_price,
+        description: req.body.description
     });
     console.log(product);
-    await product.save();
-    console.log("Product Added Successfully");
-    res.json({
-        success: true,
-        name: req.body.name,
-    })
-});
 
-//Creating API for deleting Products
-app.post('/removeproduct', async(req, res) => {
-    await Product.findOneAndDelete({id: req.body.id});
-    console.log("Product Deleted Successfully");
+    //to save in database
+
+    await product.save();
+
+    console.log("Product added successfully");
     res.json({
-        success: true,
-        name: req.body.name,
+        success: 1,
+        message: "Product added successfully",
+        name: req.body.name
     })
+
+
 })
 
-//Creating API for getting all Products
-app.get('/allproducts', async(req, res) => {
-    let products = await Product.find({});
-    console.log("All Products Fetched Successfully");
-    res.send(products);
-}),
+
+// creating api for deleting product
+
+app.post("/deleteproduct", async (req, res) => {
+
+    await Product.findOneAndDelete({ id: req.body.id });
+    console.log("Product deleted successfully");
+    res.json({
+        success: 1,
+        message: "Product deleted successfully",
+        id: req.body.id
+
+    })
+});
+
+
+//creating api for getting product from the database 
+
+app.get("/allproduct", async (req, res) => {
+    const products = await Product.find({});
+    console.log("All products fetched successfully");
+    res.json(products);
+
+
+
+})
+
+
+
 
 app.listen(port, (error) => {
-    if(!error){
-        console.log("Server Running on port "+port);
+    if (!error) {
+        console.log("server running on ", port);
     }
-    else{
-        console.log("Error : "+error);
+    else {
+        console.log("Error : " + error)
     }
-});
+})
