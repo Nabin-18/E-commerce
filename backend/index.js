@@ -8,7 +8,7 @@ const path = require("path")
 const cors = require("cors");
 const { v4: uuidv4 } = require('uuid');
 const { connect } = require('http2');
-// const bodyParser = require("body-parser")
+
 // initilized all the modules 
 
 app.use(express.json());
@@ -46,32 +46,15 @@ const upload = multer({ storage: storage })
 
 //creating upload endpoint images
 
-// app.use('/images', express.static('upload/images'))
+app.use('/images', express.static('upload/images'))
 
-// app.post("/upload", upload.single('product'), (req, res) => {
-//     res.json({
-//         success: 1,
-//         image_url: `http:localhost:${port}/image/${req.file.filename}`
-//     })
-// })
+app.post("/upload", upload.single('product'), (req, res) => {
+    res.json({
+        success: 1,
+        image_url: `http:localhost:${port}/image/${req.file.filename}`
+    })
+})
 
-app.post('/upload', upload.single('file'), (req, res) => {
-
-    if (!req.file) {
-        return res.status(400).send('No file uploaded.');
-    }
-    res.send(`File uploaded successfully: ${req.file.filename}`);
-});
-
-app.get('/upload', (req, res) => {
-    res.send(`
-    <h2>File Upload using Multer</h2>
-    <form action="/upload" enctype="multipart/form-data" method="POST">
-      <input type="file" name="file" />
-      <button type="submit">Upload</button>
-    </form>
-  `);
-});
 
 
 

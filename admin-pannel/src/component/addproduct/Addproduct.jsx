@@ -2,7 +2,7 @@ import React from "react";
 import "./Addproduct.css";
 import upload_area from "../../assests/upload_area.svg";
 import { useState } from "react";
-import { response } from "express";
+// import { response } from "express";
 
 function Addproduct() {
   const [image, setImage] = useState(false);
@@ -23,29 +23,32 @@ function Addproduct() {
 
   const addProduct = async () => {
     console.log(productDetails);
-    let responseData;
-    let product = productDetails;
-    let formData = new FormData();
-    formData.append(product.name);
 
-    await fetch("http://localhost:4000/upload", {
+    //when we click add btn , it will communicate with backend
+    let responseData;
+    let product=productDetails;
+
+    let formData = new FormData();
+    formData.append('product',image);
+
+    // now send data to api
+
+   const response= await fetch("http://localhost:4000/upload", {
       method: "POST",
       headers: {
-        Accept: "application/json",
+        accpet: "application/json",
       },
       body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        responseData = data;
-        console.log(data);
-      })
-      .catch((error) => console.log(error));
-    if (responseData.success) {
-      product.image = responseData.image_url;
-      console.log(product);
-    }
+      
+    }).then((response) => response.json().then((data) => {responseData=data})); 
+    //this is the response from the server
+
+  if(responseData.success){
+    product.image=responseData.image_url;
+    console.log(product);
+  }
   };
+
   return (
     <div className="add-product">
       <div className="addproduct-itemfield">
@@ -110,14 +113,11 @@ function Addproduct() {
           hidden
         />
       </div>
-      <button
-        onClick={() => {
-          addProduct();
-        }}
-        className="addproduct-btn"
-      >
+      {/* <button onClick={() => addProduct()} className="addproduct-btn">
         ADD
-      </button>
+      </button> */}
+
+      <button onClick={()=>addProduct()} className="addproduct-btn">ADD</button>
     </div>
   );
 }

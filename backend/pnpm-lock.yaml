@@ -26,6 +26,9 @@ dependencies:
   uuid:
     specifier: ^10.0.0
     version: 10.0.0
+  webpack-node-externals:
+    specifier: ^3.0.0
+    version: 3.0.0
 
 packages:
 
@@ -1003,6 +1006,11 @@ packages:
   /webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
     engines: {node: '>=12'}
+    dev: false
+
+  /webpack-node-externals@3.0.0:
+    resolution: {integrity: sha512-LnL6Z3GGDPht/AigwRh2dvL9PQPFQ8skEpVrWZXLWBYmqcaojHNN0onvHzie6rq7EWKrrBfPYqNEzTJgiwEQDQ==}
+    engines: {node: '>=6'}
     dev: false
 
   /whatwg-url@13.0.0:

@@ -12,7 +12,6 @@ function Admin() {
       <Routes>
       <Route path="/addproduct" element={<Addproduct />} />
         <Route path="/listproduct" element={<Listproduct />} />
-      
       </Routes>
     </div>
   );
