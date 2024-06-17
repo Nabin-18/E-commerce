@@ -19,7 +19,13 @@ app.use(cors());
 
 const uri = ("mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
 
-mongoose.connect(uri);
+
+// mongoose.connect(uri); 
+mongoose.connect(uri)
+
+
+
+
 
 //body parser  or middleware to solve validation path error in mongoose
 
@@ -46,12 +52,12 @@ const upload = multer({ storage: storage })
 
 //creating upload endpoint images
 
-app.use('/images', express.static('upload/images'))
+app.use('/upload', express.static('upload'))
 
 app.post("/upload", upload.single('product'), (req, res) => {
     res.json({
         success: 1,
-        image_url: `http:localhost:${port}/image/${req.file.filename}`
+        image_url: `http:localhost:${port}/upload/${req.file.filename}`
     })
 })
 
@@ -66,7 +72,7 @@ const Product = mongoose.model("product", {
     "category": { type: String, required: true },
     "new_price": { type: String, required: true },
     "old_price": { type: String, required: true },
-    "description": { type: String, required: true },
+    // "description": { type: String, required: true },
     "image": { type: String, required: true },
     "id": { type: String, required: true },
     "date": { type: Date, default: Date.now },
@@ -86,7 +92,7 @@ app.post("/addproduct", async (req, res) => {
         category: req.body.category,
         new_price: req.body.new_price,
         old_price: req.body.old_price,
-        description: req.body.description
+        // description: req.body.description,
     });
     console.log(product);
 
@@ -107,7 +113,7 @@ app.post("/addproduct", async (req, res) => {
 
 // creating api for deleting product
 
-app.post("/deleteproduct", async (req, res) => {
+app.delete("/deleteproduct", async (req, res) => {
 
     await Product.findOneAndDelete({ id: req.body.id });
     console.log("Product deleted successfully");
@@ -120,16 +126,103 @@ app.post("/deleteproduct", async (req, res) => {
 });
 
 
-//creating api for getting product from the database 
 
+
+
+
+// creating api for getting product from the database
 app.get("/allproduct", async (req, res) => {
     const products = await Product.find({});
     console.log("All products fetched successfully");
     res.json(products);
-
-
-
 })
+
+//schema creating for user model for login signup
+const User = mongoose.model("user", {
+    "name": { type: String, required: true },
+    "email": { type: String, required: true, unique: true },
+    "password": { type: String, required: true },
+    "date": { type: Date, default: Date.now },
+    "cartData": { type: Object }
+})
+
+//creating endpoint for registering the user
+app.post('/signup', async (req, res) => {
+    let check = await User.findOne({ email: req.body.email });
+    if (check) {
+        res.json({
+            success: false,
+            message: "User already exists"
+        })
+    }
+    let cart = {};
+    for (let i = 0; i < 300; i++) {
+        cart[i] = 0;
+    }
+    const user = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        cartData: cart
+    });
+
+    await user.save();
+
+    const data = {
+        user: {
+            id: user.id
+        }
+    }
+    const token = jwt.sign(data, "secret_key");
+    res.json({
+        success: true,
+        message: "User registered successfully",
+        token: token
+    })
+})
+
+//creating user login endpoint
+
+app.post('/login', async (req, res) => {
+    let user = await User.findOne({ email: req.body.email });
+    if (user) {
+        const passwordCompare = req.body.password === user.password;
+
+        if (passwordCompare) {
+            const data = {
+                user: {
+                    id: user.id
+                }
+            }
+
+            const token = jwt.sign(data, "secret_key")
+           return  res.json({
+                success: true,
+                message: "User logged in successfully",
+                token: token
+            });
+        }
+
+        else {
+          return  res.json({
+                success: false,
+                message: "Wrong email or password"
+            });
+        }
+        console.log(user)
+
+    }
+    //if user is not available
+    else {
+        res.json({
+            success: false,
+            message: "User not found"
+        });
+    }
+
+}
+
+)
 
 
 

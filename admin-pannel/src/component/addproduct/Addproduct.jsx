@@ -12,6 +12,7 @@ function Addproduct() {
     image: "",
     new_price: "",
     old_price: "",
+    // description: "",
   });
   const imageHandler = (e) => {
     setImage(e.target.files[0]);
@@ -26,27 +27,46 @@ function Addproduct() {
 
     //when we click add btn , it will communicate with backend
     let responseData;
-    let product=productDetails;
+    let product = productDetails;
 
     let formData = new FormData();
-    formData.append('product',image);
+    formData.append("product", image);
 
     // now send data to api
 
-   const response= await fetch("http://localhost:4000/upload", {
+    const response = await fetch("http://localhost:4000/upload", {
       method: "POST",
       headers: {
         accpet: "application/json",
       },
       body: formData,
-      
-    }).then((response) => response.json().then((data) => {responseData=data})); 
+    }).then((response) =>
+      response.json().then((data) => {
+        responseData = data;
+      })
+    );
     //this is the response from the server
 
-  if(responseData.success){
-    product.image=responseData.image_url;
-    console.log(product);
-  }
+    if (responseData.success) {
+      product.image = responseData.image_url;
+      console.log(product);
+      //for addproduct details
+
+      await fetch("http://localhost:4000/addproduct", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+        },
+        body: JSON.stringify(product),
+      }).then((response) =>
+        response.json().then((data) => {
+          data.success
+            ? alert("Product added successfully")
+            : alert("Failed to add product");
+        })
+      );
+    }
   };
 
   return (
@@ -117,7 +137,9 @@ function Addproduct() {
         ADD
       </button> */}
 
-      <button onClick={()=>addProduct()} className="addproduct-btn">ADD</button>
+      <button onClick={() => addProduct()} className="addproduct-btn">
+        ADD
+      </button>
     </div>
   );
 }
