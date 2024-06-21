@@ -12,7 +12,8 @@ function Addproduct() {
     image: "",
     new_price: "",
     old_price: "",
-    // description: "",
+    description:""
+  
   });
   const imageHandler = (e) => {
     setImage(e.target.files[0]);
@@ -133,9 +134,7 @@ function Addproduct() {
           hidden
         />
       </div>
-      {/* <button onClick={() => addProduct()} className="addproduct-btn">
-        ADD
-      </button> */}
+      
 
       <button onClick={() => addProduct()} className="addproduct-btn">
         ADD

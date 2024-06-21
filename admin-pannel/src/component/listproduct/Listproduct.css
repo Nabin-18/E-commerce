@@ -54,6 +54,10 @@
 .listproduct-allproduct {
   overflow-y: auto;
 }
+.listproduct-image{
+  height: 80px;
+  width: 80px;
+}
 
 @media screen and (max-width: 800px) {
   .list-product {

@@ -60,3 +60,11 @@
   height: 30px;
   width: 30px;
 }
+@media (max-width: 800px) {
+  .loginsignup-container {
+    width: 80%;
+  }
+  .loginsignup-container button {
+    width: 100%;
+  }
+}

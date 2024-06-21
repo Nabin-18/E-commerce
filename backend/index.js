@@ -21,7 +21,10 @@ const uri = ("mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/
 
 
 // mongoose.connect(uri); 
-mongoose.connect(uri)
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
 
 
 
@@ -57,7 +60,7 @@ app.use('/upload', express.static('upload'))
 app.post("/upload", upload.single('product'), (req, res) => {
     res.json({
         success: 1,
-        image_url: `http:localhost:${port}/upload/${req.file.filename}`
+        image_url: `http://localhost:${port}/upload/${req.file.filename}`
     })
 })
 
@@ -92,7 +95,7 @@ app.post("/addproduct", async (req, res) => {
         category: req.body.category,
         new_price: req.body.new_price,
         old_price: req.body.old_price,
-        // description: req.body.description,
+        description: req.body.description,
     });
     console.log(product);
 
@@ -124,6 +127,8 @@ app.delete("/deleteproduct", async (req, res) => {
 
     })
 });
+
+
 
 
 
@@ -191,12 +196,13 @@ app.post('/login', async (req, res) => {
         if (passwordCompare) {
             const data = {
                 user: {
-                    id: user.id
+                    id: user.id,
+
                 }
             }
 
             const token = jwt.sign(data, "secret_key")
-           return  res.json({
+            return res.json({
                 success: true,
                 message: "User logged in successfully",
                 token: token
@@ -204,12 +210,13 @@ app.post('/login', async (req, res) => {
         }
 
         else {
-          return  res.json({
+
+            return res.json({
                 success: false,
                 message: "Wrong email or password"
             });
         }
-        console.log(user)
+
 
     }
     //if user is not available
@@ -224,6 +231,21 @@ app.post('/login', async (req, res) => {
 
 )
 
+//creating endpoint for the new collection data
+app.get('/newcollection', async (req, res) => {
+    let products = await Product.find({});
+    let newcollection = products.slice(1).slice(-8)
+    //we will get recently added 8 items
+    console.log("NewCollection fetched");
+    res.send(newcollection);
+})
+//creting endpoint for popular in women section 
+app.get("/popularinwoman", async (req, res) => {
+    let products = await Product.find({});
+    let popularinwoman = products;
+    console.log("Popular in woman section fetched ")
+    res.send(popularinwoman);
+})
 
 
 
