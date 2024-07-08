@@ -234,6 +234,7 @@ const fetchUser = async (req, res, next) => {
 
 
 //creating endpoint for addcart in mongodb
+//khanaldai
 
 app.post('/addtocart', fetchUser, async (req, res) => {
     // console.log(req.body,req.user)
