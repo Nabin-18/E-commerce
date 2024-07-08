@@ -23,15 +23,57 @@ const ShopContextProvider = (props) => {
     fetch("http://localhost:4000/allproduct")
       .then((response) => response.json())
       .then((data) => setAll_Product(data));
-   
+
+    if (localStorage.getItem("auth-token")) {
+      fetch("http://localhost:4000/getcartdata", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          accept: "application/form-data",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Hello nabin:",data);
+          setCartItems(data.cartData);
+        });
+    }
   }, []);
 
   const addToCart = (itemId) => {
+    console.log("Button clicked")
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
-  }
+    if (localStorage.getItem("auth-token")) {
+      fetch("http://localhost:4000/addtocart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          accept: "application/form-data",
+        },
+        body: JSON.stringify({ itemId: itemId }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+    }
+  };
 
   const removeFromCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+    if (localStorage.getItem("auth-token")) {
+      fetch("http://localhost:4000/removefromcart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          accept: "application/form-data",
+        },
+        body: JSON.stringify({ itemId: itemId }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+    }
   };
 
   const getTotalCartAmount = () => {
@@ -55,6 +97,7 @@ const ShopContextProvider = (props) => {
       }
     }
     return totalItem;
+    
   };
 
   const contextValue = {

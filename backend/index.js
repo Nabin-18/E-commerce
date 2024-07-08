@@ -213,7 +213,63 @@ app.get("/popularinwoman", async (req, res) => {
     console.log("Popular in woman section fetched ");
     res.send(popularinwoman);
 });
-//creating endpoint for addcart in mongodv
+
+//creating middleware to fetch user
+
+const fetchUser = async (req, res, next) => {
+    const token = req.header("auth-token");
+    if (!token) {
+        res.status(401).send({ error: "Please authenticate using a valid token" });
+    }
+    try {
+        const data = jwt.verify(token, "secret_key");
+        const user = await User.findOne({ _id: data.user.id });
+        req.user = user;
+        next();
+    } catch (error) {
+        res.send({ error: "Please authenticate using a valid token" });
+    }
+}
+
+
+
+//creating endpoint for addcart in mongodb
+
+app.post('/addtocart', fetchUser, async (req, res) => {
+    // console.log(req.body,req.user)
+    console.log("added to cart", req.body.itemId)
+
+    let userData = await User.findOne({ _id: req.user.id })
+    //modfiy cart data 
+    userData.cartData[req.body.itemId] += 1;
+    await User.findOneAndUpdate({ _id: req.user.id }, { cartData: userData.cartData })
+
+    res.send({
+        success: true,
+        message: "Item added to cart successfully"
+    })
+
+
+})
+//creating endpoint to remove product from cartdata
+
+app.post('/removefromcart', fetchUser, async (req, res) => {
+    console.log("removed from cart", req.body.itemId)
+    let userData = await User.findOne({ _id: req.user.id })
+    if (userData.cartData[req.body.itemId] > 0) {
+        //modfiy cart data
+        userData.cartData[req.body.itemId] -= 1;
+        await User.findOneAndUpdate({ _id: req.user.id }, { cartData: userData.cartData })
+        res.send({ success: true, message: "Item removed from cart successfully" })
+    }
+})
+
+//creating api to get cartdata
+app.post('/getcartdata', fetchUser, async (req, res) => {
+    console.log("cart data fetched");
+    let userData = await User.findOne({ _id: req.user.id })
+    res.json(userData.cartData);
+})
 
 
 app.listen(port, (error) => {
