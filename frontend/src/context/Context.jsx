@@ -40,7 +40,7 @@ const ShopContextProvider = (props) => {
         });
     }
   }, []);
-
+//currently addTocart is not working properly
   const addToCart = (itemId) => {
     console.log("Button clicked")
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));

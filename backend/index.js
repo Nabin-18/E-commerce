@@ -8,6 +8,7 @@ const path = require("path");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
 const { connect } = require("http2");
+const paypal = require('paypal-rest-sdk');
 
 // initilized all the modules
 
@@ -234,7 +235,7 @@ const fetchUser = async (req, res, next) => {
 
 
 //creating endpoint for addcart in mongodb
-//khanaldai
+
 
 app.post('/addtocart', fetchUser, async (req, res) => {
     // console.log(req.body,req.user)
@@ -270,6 +271,115 @@ app.post('/getcartdata', fetchUser, async (req, res) => {
     console.log("cart data fetched");
     let userData = await User.findOne({ _id: req.user.id })
     res.json(userData.cartData);
+})
+
+
+// PayPal configuration
+paypal.configure({
+    'mode': 'sandbox', //sandbox or live
+    'client_id': 'AUTqAHlosBUbXu-sqKGtDVntdDpdEzUdXM9y1mU4cyyRv2IIXnAABr9YTT_1C7V7hDIySDw8ACbycoth',
+    'client_secret': 'EDlWWgUOiJFVVkvot1d19CjkXtsD9OPJa5354wLLJAAJIe7Pz_FPG6iS4Y0RXauS0aqZTuAWlK0nmxzD'
+});
+app.get('/payment', async (req, res) => {
+
+    let data
+    try {
+
+        let create_payment_json = {
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
+            },
+            "redirect_urls": {
+                "return_url": "http://localhost:4000/success",
+                "cancel_url": "http://localhost:4000/failed"
+            },
+            "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": "item",
+                        "sku": "item",
+                        "price": "1.00",
+                        "currency": "USD",
+                        "quantity": 1
+                    }]
+                },
+                "amount": {
+                    "currency": "USD",
+                    "total": "1.00"
+                },
+                "description": "This is the payment description."
+            }]
+        };
+
+
+         paypal.payment.create(create_payment_json, function (error, payment) {
+            if (error) {
+                throw error;
+            } else {
+                console.log("Create Payment Response");
+                // console.log(payment);
+                data = payment;
+                res.json(data);
+
+            }
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+
+
+app.get('/success', async (req, res) => {
+
+    try {
+
+        const payerId = req.query.PayerID;
+        const paymentId = req.query.paymentId;
+
+        const execute_payment_json = {
+            "payer_id": payerId,
+            "transactions": [{
+                "amount": {
+                    "currency": "USD",
+                    "total": "1.00"
+                }
+            }]
+        }
+
+
+        paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+            if (error) {
+                console.log(error)
+                return res.redirect("http://localhost:5173/failed");
+            } else {
+                console.log("Execute Payment Response");
+                // console.log(payment);
+                const response = JSON.stringify(payment);
+                const parsedResponse = JSON.parse(response);
+
+                const transactions = parsedResponse.transactions[0];
+
+                console.log("transactions", transactions);
+
+                return res.redirect("http://localhost:5173/success");
+            }
+        })
+
+
+    } catch (error) {
+        console.log(error);
+    }
+
+})
+
+
+app.get('/failed', async (req, res) => {
+
+    return res.redirect("http://localhost:5173/failed");
 })
 
 
