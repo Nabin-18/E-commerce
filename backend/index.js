@@ -19,7 +19,7 @@ app.use(cors());
 //  now for monogodb, Data base connection
 
 const uri =
-    "mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+    "mongodb+srv://sg551666:9816156109@cluster0.tteekzl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // mongoose.connect(uri);
 mongoose.connect(uri, {
@@ -76,9 +76,19 @@ const Product = mongoose.model("product", {
 });
 
 app.post("/addproduct", upload.single("image"), async (req, res) => {
-    const productId = uuidv4();
+    let products = await Product.find({});
+    let id;
+    if (products.length>0)
+    {
+        let last_product_array = products.slice(-1);
+        let last_product = last_product_array[0];
+        id = last_product.id + 1;
+    }
+    else{
+        id = 1;
+    }
     const product = new Product({
-        id: productId,
+        id: id,
         name: req.body.name,
         image: `http://localhost:${port}/upload/${req.file.filename}`,
         category: req.body.category,
