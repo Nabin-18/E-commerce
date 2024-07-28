@@ -1,6 +1,7 @@
 import "./Addproduct.css";
 import upload_area from "../../assests/upload_area.svg";
 import { useState } from "react";
+import Sidebar from "../sidebar/Sidebar";
 
 function Addproduct() {
   const [image, setImage] = useState(false);
@@ -24,6 +25,9 @@ function Addproduct() {
   };
 
   return (
+   <>
+   <div className="container">
+   <Sidebar />
     <form
       className="add-product"
       onSubmit={(e) => {
@@ -79,6 +83,8 @@ function Addproduct() {
 
       <button className="addproduct-btn">ADD</button>
     </form>
+   </div>
+   </>
   );
 }
 

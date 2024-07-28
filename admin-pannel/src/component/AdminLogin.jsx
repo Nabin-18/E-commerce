@@ -30,7 +30,7 @@ function AdminLogin() {
       formData.username === correctUsername &&
       formData.password === correctPassword
     ) {
-      navigate("/admin");
+      navigate("/addproduct");
     } else {
       setError("Invalid username or password");
     }
@@ -80,7 +80,7 @@ function AdminLogin() {
 const styles = {
   container: {
     maxWidth: "400px",
-    margin: "0 auto",
+    margin: "20px auto",
     padding: "20px",
     border: "1px solid #ccc",
     borderRadius: "8px",

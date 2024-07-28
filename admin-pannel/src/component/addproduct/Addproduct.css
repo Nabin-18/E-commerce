@@ -6,6 +6,12 @@
     margin:20px 30px;
     border-radius: 6px;
     background: white;
+ 
+}
+.container{
+    display: flex;
+   
+  
 }
 .addproduct-itemfield{
     width: 100%;
@@ -58,6 +64,10 @@
 }
 
 @media screen and (max-width: 768px){
+    .container{
+    display: flex;
+    flex-direction: column;
+  }
     .add-product{
         padding:  30px;
         margin: 20px ;

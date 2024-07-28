@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Listproduct.css";
 import cross_icon from "../../assests/cross_icon.png";
+import Sidebar from "../sidebar/Sidebar";
 
 function Listproduct() {
   const [allProducts, setAllProducts] = useState([]);
@@ -28,6 +29,9 @@ function Listproduct() {
   };
 
   return (
+    <>
+    <div className="container">
+    <Sidebar />
     <div className="list-product">
       <h1>All Product List</h1>
 
@@ -63,6 +67,8 @@ function Listproduct() {
         })}
       </div>
     </div>
+    </div>
+    </>
   );
 }
 
