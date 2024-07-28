@@ -125,7 +125,7 @@ function LoginSignup() {
           )}
 
           <div className="loginsignup-agree">
-            <input type="checkbox" name="" id="" />
+            <input type="checkbox"  />
             <p>
               By Continue,I agree to the terms & privacy policy of the company{" "}
             </p>
