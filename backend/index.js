@@ -19,7 +19,8 @@ app.use(cors());
 //  now for monogodb, Data base connection
 
 const uri =
-    "mongodb+srv://sg551666:9816156109@cluster0.tteekzl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+    // "mongodb+srv://sg551666:9816156109@cluster0.tteekzl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+    "mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // mongoose.connect(uri);
 mongoose.connect(uri, {
@@ -78,13 +79,12 @@ const Product = mongoose.model("product", {
 app.post("/addproduct", upload.single("image"), async (req, res) => {
     let products = await Product.find({});
     let id;
-    if (products.length>0)
-    {
+    if (products.length > 0) {
         let last_product_array = products.slice(-1);
         let last_product = last_product_array[0];
         id = last_product.id + 1;
     }
-    else{
+    else {
         id = 1;
     }
     const product = new Product({
@@ -323,7 +323,7 @@ app.get('/payment', async (req, res) => {
         };
 
 
-         paypal.payment.create(create_payment_json, function (error, payment) {
+        paypal.payment.create(create_payment_json, function (error, payment) {
             if (error) {
                 throw error;
             } else {

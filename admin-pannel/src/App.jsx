@@ -12,11 +12,8 @@ const App = () => {
     <>
       <Navbar />
 
-
       <Routes>
         <Route path="/" element={<AdminLogin />} />
-  
-        
       
         <Route path="/addproduct" element={<Addproduct />} />
         
@@ -25,7 +22,6 @@ const App = () => {
        
       </Routes>
         
-      
     </>
   );
 };
