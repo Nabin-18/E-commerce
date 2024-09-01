@@ -14,7 +14,7 @@ const paypal = require('paypal-rest-sdk');
 
 app.use(express.json());
 app.use(cors());
-// it is used to connectwith express
+// it is used to connect with express
 
 //  now for monogodb, Data base connection
 
