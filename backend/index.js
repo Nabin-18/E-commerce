@@ -19,10 +19,9 @@ app.use(cors());
 //  now for monogodb, Data base connection
 
 const uri =
-    // "mongodb+srv://sg551666:9816156109@cluster0.tteekzl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
     "mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
-// mongoose.connect(uri);
+
 mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
