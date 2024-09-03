@@ -33,7 +33,7 @@ function NewsLetter() {
     
         <h1>Get Exclusive Offers On Your Email</h1>
         <p>Subscribe to our newsletter and stay Up</p>
-        <div>
+        <div className="input-field">
           <input type="text" name="name" placeholder="Enter your name" required />
           <input type="email" name="email" placeholder="Your email Id" required />
         

@@ -1,6 +1,5 @@
 import React from 'react'
 import '../RelatedProducts/RelatedProduct.css'
-import data_product from '../Assets/data'
 import Item from '../Item/Item'
 
 
@@ -17,15 +16,9 @@ function RelatedProduct() {
 
                     })
 
-
                 }
 
-
-
-
             </div>
-
-
 
         </div>
     )

@@ -4,7 +4,7 @@ import Popular from '../components/Popular/Popular'
 import Offers from '../components/Offers/Offers'
 import NewCollection from '../components/NewCollection/NewCollection'
 import NewsLetter from '../components/NewsLetter/NewsLetter'
-import Product from './Product'
+
 
 
 

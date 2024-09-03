@@ -12,7 +12,7 @@ function Product() {
   const { productId } = useParams();
   console.log(productId);
   const product = all_product.find((e) => e.id == productId);
-  console.log(all_product);
+  // console.log(all_product);
 
   return (
     <div>

@@ -252,7 +252,7 @@ app.post('/addtocart', fetchUser, async (req, res) => {
 
     let userData = await User.findOne({ _id: req.user.id })
     //modfiy cart data 
-    userData.cartData[req.body.itemId] += 1;
+    userData.cartData[req.body.itemId] ++;
     await User.findOneAndUpdate({ _id: req.user.id }, { cartData: userData.cartData })
 
     res.send({

@@ -5,6 +5,7 @@
     align-items: center;
     gap: 50px;
    
+   
 }
 .footer-logo{
     display: flex;
@@ -55,4 +56,30 @@
     border-radius: 10px;
     height: 3px;
     background: #c7c7c7;
+}
+
+@media screen and (max-width: 768px){
+    .footer{
+        gap: 30px;
+    }
+    .footer-logo p{
+        font-size: 36px;
+    }
+    .footer-links{
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 18px;
+    }
+    .footer-social-icon{
+        gap: 10px;
+    }
+    .footer-icons-container{
+        padding: 4px 8px;
+    }
+    .footer-copyright{
+        gap: 20px;
+        font-size: 18px;
+    }
+    
 }

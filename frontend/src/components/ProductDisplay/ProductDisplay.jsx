@@ -34,16 +34,17 @@ function ProductDisplay(props) {
         </div>
         <div className="productdisplay-right-prices">
           <div className="productdisplay-right-price-old">
+          Old Price:
             ${product.old_price}
           </div>
           <div className="productdisplay-right-price-new">
+          New Price:
             ${product.new_price}
           </div>
         </div>
         <div className="productdisplay-right-description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum,
-          tempore corrupti velit perferendis officia vitae ea id deserunt facere
-          minima?
+          <h1>Description</h1>
+          <p>{product.description}</p>
         </div>
         <div className="productdisplay-right-size">
           <h1>Select Size</h1>
@@ -63,7 +64,7 @@ function ProductDisplay(props) {
           ADD TO CART
         </button>
         <p className="productdisplay-right-category">
-          <span>Category:</span>Women,T-shirt,Crop Top
+          <span>Category:{product.category}</span>
         </p>
         <p className="productdisplay-right-category">
           <span>Tags:</span>Morden ,Latest

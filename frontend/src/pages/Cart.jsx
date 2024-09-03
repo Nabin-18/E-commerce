@@ -4,7 +4,7 @@ import { CartItem } from '../components/CartItems/CartItem'
 function Cart() {
   return (
     <div>
-    <CartItem />
+    <CartItem /> 
     </div>
   )
 }
