@@ -70,7 +70,7 @@ const Product = mongoose.model("product", {
     old_price: { type: String, required: true },
     description: { type: String, required: true },
     image: { type: String, required: true },
-    id: { type: String, required: true },
+    id: { type: Number, required: true },
     date: { type: Date, default: Date.now },
     available: { type: Boolean, default: true },
 });
