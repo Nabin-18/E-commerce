@@ -16,8 +16,11 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="nav-logo">
-        <img src={logo} alt="logo" />
-        <p>SHOPPER</p>
+        <a href="/" style={{ textDecoration: "none",}}>
+        <div className="logo-container">
+        <img src={logo} alt="logo" classname = "logo-image" />
+        <p className="logo-text">SHOPPER</p> </div>
+        </a>
       </div>
       <ul className="nav-menu">
         <li>
