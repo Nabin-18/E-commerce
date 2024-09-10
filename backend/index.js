@@ -1,3 +1,4 @@
+
 const port = 4000;
 const express = require("express");
 const app = express();
@@ -70,7 +71,7 @@ const Product = mongoose.model("product", {
     old_price: { type: String, required: true },
     description: { type: String, required: true },
     image: { type: String, required: true },
-    id: { type: Number, required: true },
+    id: { type: String, required: true },
     date: { type: Date, default: Date.now },
     available: { type: Boolean, default: true },
 });
@@ -136,6 +137,15 @@ const User = mongoose.model("user", {
     date: { type: Date, default: Date.now },
     cartData: { type: Object },
 });
+//schema for payment success
+const Payment = mongoose.model("payment", {
+    user: { type: String, required: true },
+    paymentId: { type: String, required: true },
+    date: { type: Date, default: Date.now },
+    name: { type: String, required: true },
+    category: { type: String, required: true },
+    image: { type: String, required: true },
+});
 
 //creating endpoint for registering the user
 app.post("/signup", async (req, res) => {
@@ -147,7 +157,7 @@ app.post("/signup", async (req, res) => {
         });
     }
     let cart = {};
-    for (let i = 0; i < 300; i++) {
+    for (let i = 0; i < 9999999999999999999999999; i++) {
         cart[i] = 0;
     }
     const user = new User({
@@ -308,14 +318,14 @@ app.get('/payment', async (req, res) => {
                     "items": [{
                         "name": "item",
                         "sku": "item",
-                        "price": "1.00",
+                        "price": "100",
                         "currency": "USD",
                         "quantity": 1
                     }]
                 },
                 "amount": {
                     "currency": "USD",
-                    "total": "1.00"
+                    "total": "100"
                 },
                 "description": "This is the payment description."
             }]
@@ -354,7 +364,7 @@ app.get('/success', async (req, res) => {
             "transactions": [{
                 "amount": {
                     "currency": "USD",
-                    "total": "1.00"
+                    "total": "100"
                 }
             }]
         }

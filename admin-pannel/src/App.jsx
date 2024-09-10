@@ -4,6 +4,7 @@ import AdminLogin from "./component/AdminLogin";
 import { Route, Routes } from "react-router-dom";
 import Addproduct from "./component/addproduct/Addproduct";
 import Listproduct from "./component/listproduct/Listproduct";
+import OrderList from "./component/orderlist/OrderList";
 
 
 
@@ -19,7 +20,7 @@ const App = () => {
         
         <Route path="/listproduct" element={<Listproduct />} />
         
-       
+        <Route path="/orderlist" element={<OrderList />} />
       </Routes>
         
     </>

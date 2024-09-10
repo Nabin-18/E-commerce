@@ -17,7 +17,14 @@ function Sidebar() {
        <Link to={"/listproduct"} style={{ textDecoration: "none" }}>
         <div className="sidebar-item">
           <img src={list_product_icon} alt="" />
-          <p>Product list</p>
+          <p>Product List</p>
+        </div>
+      </Link>
+
+      <Link to={"/orderlist"} style={{ textDecoration: "none" }}>
+        <div className="sidebar-item">
+          <img src={list_product_icon} alt="" />
+          <p>Order List</p>
         </div>
       </Link>
     </div>
