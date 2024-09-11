@@ -28,7 +28,7 @@
   gap: 20px;
 }
 .item-price-new {
-  color: #374151;
+  color: #ff4141;
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
@@ -45,3 +45,13 @@
   transition: 0.6s;
 }
 
+.item-description{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+}
