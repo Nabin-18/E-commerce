@@ -9,7 +9,9 @@ const path = require("path");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
 const { connect } = require("http2");
-const paypal = require('paypal-rest-sdk');
+const stripe = require("stripe")("sk_test_51PxtJ5RqdVllZqdP8V0okBG9oryNUGgN2zHFgd5TAnT5HK4APlQyqsaUuCY1hFcQHypVOsCPG1QF7A4agEBEnI2700PyRUkrFJ")
+
+
 
 // initilized all the modules
 
@@ -302,114 +304,31 @@ app.get('/getcartdata', fetchUser, async (req, res) => {
 //     res.json(userData.cartData);
 // })
 
+//checkout api
+app.post("/api/create-checkout-session", async (req, res) =>{
+    const {products} = req.body;
 
-// PayPal configuration
-paypal.configure({
-    'mode': 'sandbox', //sandbox or live
-    'client_id': 'AUTqAHlosBUbXu-sqKGtDVntdDpdEzUdXM9y1mU4cyyRv2IIXnAABr9YTT_1C7V7hDIySDw8ACbycoth',
-    'client_secret': 'EDlWWgUOiJFVVkvot1d19CjkXtsD9OPJa5354wLLJAAJIe7Pz_FPG6iS4Y0RXauS0aqZTuAWlK0nmxzD'
+    const lineItems = products.map((product)=>({
+        price_data:{
+            currency: "usd",
+            product_data:{
+                name: product.name,
+            },
+            unit_amount: product.new_price * 100,
+        },
+        quantity: product.quantity,
+    }));
+
+    const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items:lineItems,
+        mode: "payment",
+        success_url: "http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}&order=${encodeURI(JSON.stringify(products))}",
+        cancel_url: "http://localhost:5173/cancel",
+    });
+
+    res.json({id: session.id})
 });
-app.get('/payment', async (req, res) => {
-
-    let data
-    try {
-
-        let create_payment_json = {
-            "intent": "sale",
-            "payer": {
-                "payment_method": "paypal"
-            },
-            "redirect_urls": {
-                "return_url": "http://localhost:4000/success",
-                "cancel_url": "http://localhost:4000/failed"
-            },
-            "transactions": [{
-                "item_list": {
-                    "items": [{
-                        "name": "item",
-                        "sku": "item",
-                        "price": "100",
-                        "currency": "USD",
-                        "quantity": 1
-                    }]
-                },
-                "amount": {
-                    "currency": "USD",
-                    "total": "100"
-                },
-                "description": "This is the payment description."
-            }]
-        };
-
-
-        paypal.payment.create(create_payment_json, function (error, payment) {
-            if (error) {
-                throw error;
-            } else {
-                console.log("Create Payment Response");
-                // console.log(payment);
-                data = payment;
-                res.json(data);
-
-            }
-        });
-
-
-    } catch (error) {
-        console.log(error);
-    }
-})
-
-
-
-app.get('/success', async (req, res) => {
-
-    try {
-
-        const payerId = req.query.PayerID;
-        const paymentId = req.query.paymentId;
-
-        const execute_payment_json = {
-            "payer_id": payerId,
-            "transactions": [{
-                "amount": {
-                    "currency": "USD",
-                    "total": "100"
-                }
-            }]
-        }
-
-
-        paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
-            if (error) {
-                console.log(error)
-                return res.redirect("http://localhost:5173/failed");
-            } else {
-                console.log("Execute Payment Response");
-                // console.log(payment);
-                const response = JSON.stringify(payment);
-                const parsedResponse = JSON.parse(response);
-
-                const transactions = parsedResponse.transactions[0];
-
-                console.log("transactions", transactions);
-
-                return res.redirect("http://localhost:5173/success");
-            }
-        })
-
-
-    } catch (error) {
-        console.log(error);
-    }
-
-})
-
-
-app.get('/failed', async (req, res) => {
-
-    return res.redirect("http://localhost:5173/failed");
-})
 
 
 app.listen(port, (error) => {
