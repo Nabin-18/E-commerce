@@ -18,7 +18,7 @@ const Navbar = () => {
       <div className="nav-logo">
         <a href="/" style={{ textDecoration: "none",}}>
         <div className="logo-container">
-        <img src={logo} alt="logo" classname = "logo-image" />
+        <img src={logo} alt="logo" className = "logo-image" />
         <p className="logo-text">SHOPPER</p> </div>
         </a>
       </div>

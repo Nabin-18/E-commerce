@@ -157,7 +157,7 @@ app.post("/signup", async (req, res) => {
         });
     }
     let cart = {};
-    for (let i = 0; i < 9999999999999999999999999; i++) {
+    for (let i = 0; i < 300; i++) {
         cart[i] = 0;
     }
     const user = new User({
@@ -286,11 +286,21 @@ app.post('/removefromcart', fetchUser, async (req, res) => {
 })
 
 //creating api to get cartdata
-app.post('/getcartdata', fetchUser, async (req, res) => {
-    console.log("cart data fetched");
-    let userData = await User.findOne({ _id: req.user.id })
-    res.json(userData.cartData);
-})
+app.get('/getcartdata', fetchUser, async (req, res) => {
+    try {
+        console.log("cart data fetched");
+        let userData = await User.findOne({ _id: req.user.id });
+        res.json(userData.cartData);
+    } catch (error) {
+        console.error("Error fetching cart data:", error);
+        res.status(500).send({ success: false, message: "Internal Server Error" });
+    }
+});
+// app.get('/getcartdata', fetchUser, async (req, res) => {
+//     console.log("cart data fetched");
+//     let userData = await User.findOne({ _id: req.user.id })
+//     res.json(userData.cartData);
+// })
 
 
 // PayPal configuration

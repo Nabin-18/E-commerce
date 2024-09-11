@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "../CartItems/CartItem.css";
 import { useContext } from "react";
 import { ShopContext } from "../../context/Context";
@@ -8,11 +8,32 @@ export const CartItem = () => {
   const {
     all_product,
     cartItems,
+    setCartItems,
     addToCart,
     removeFromCart,
     getTotalCartAmount,
   } = useContext(ShopContext);
 
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const res = await axios.get("http://localhost:4000/getcartdata", {
+          headers: {
+            "auth-token": `${localStorage.getItem("auth-token")}`,
+          },
+        });
+
+        if (res && res.data) {
+          setCartItems(res.data); // Update the context with fetched cart data
+        }
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      }
+    };
+
+    fetchCartItems();
+  }, [setCartItems]);
+  
   const handlePayment = async (e) => {
     e.preventDefault();
 

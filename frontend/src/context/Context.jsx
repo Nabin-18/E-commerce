@@ -34,8 +34,8 @@ const ShopContextProvider = (props) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Hello nabin:",data);
-          setCartItems(data.cartData);
+          setCartItems(data);
+          localStorage.setItem("cart", JSON.stringify(data));
         });
     }
   }, []);
@@ -75,21 +75,37 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  // const getTotalCartAmount = () => {
+  //   let totalamount = 0;
+  //   for (const item in cartItems) {
+  //     if (cartItems[item] > 0) {
+  //       let itemInfo = all_product.find(
+  //         (product) => product.id === Number(item)
+        
+  //       );
+         
+
+  //       totalamount += itemInfo.new_price * cartItems[item];
+  //     }
+  //   }
+  //   return totalamount;
+  // };
+
   const getTotalCartAmount = () => {
     let totalamount = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        let itemInfo = all_product.find(
-          (product) => product.id === Number(item)
-        
-        );
-         
-
-        totalamount += itemInfo.new_price * cartItems[item];
+        const itemInfo = all_product.find((product) => product.id === item);
+        if (itemInfo) {
+          totalamount += itemInfo.new_price * cartItems[item];
+        } else {
+          console.warn(`Item with ID ${item} not found in all_product`);
+        }
       }
     }
     return totalamount;
   };
+
   const getTotalItem = () => {
     let totalItem = 0;
     for (const item in cartItems) {
@@ -105,6 +121,7 @@ const ShopContextProvider = (props) => {
     getTotalItem,
     all_product,
     cartItems,
+    setCartItems,
     addToCart,
     removeFromCart,
     getTotalCartAmount,
