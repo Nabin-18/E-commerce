@@ -400,6 +400,16 @@ app.get('/success', async (req, res) => {
         res.redirect('/')
     })
 
+    //get the payment data from database 
+    app.get('/getpaymentdata', async (req, res) => {
+        try {
+            const paymentData = await Payment.find({});
+            res.json(paymentData);
+        } catch (error) {
+            console.error('Error fetching payment data:', error);
+            res.status(500).send('Error fetching payment data');
+        }
+    });
 app.listen(port, (error) => {
     if (!error) {
         console.log("server running on ", port);

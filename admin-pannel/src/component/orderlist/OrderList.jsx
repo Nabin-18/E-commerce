@@ -1,45 +1,46 @@
 import React, { useEffect, useState } from "react";
 import "./OrderList.css";
-import check_icon from "../../assests/check.png";
 import Sidebar from "../sidebar/Sidebar";
 
 function OrderList() {
     const [OrderProducts, setOrderProducts] = useState([]);
+    useEffect(() => {
+      fetch("http://localhost:4000/getpaymentdata")
+        .then((response) => response.json())
+        .then((data) => setOrderProducts(data));
+        console.log(OrderProducts);
+    }
+    , []);
 
   return (
     <>
-    <div className="container">
-    <Sidebar />
-    <div className="list-product">
-      <h1>All Product List</h1>
-
-      <div className="listproduct-format-main">
-        <p>Products</p>
-        <p>Title</p>
-        <p>Category</p>
-        <p>Paid By</p>
-        <p>Payment Id</p>
-      </div>
-      <div className="listproduct-allproducts">
-        <hr />
-
-        {OrderProducts.map((product, index) => {
-          return (
-            <div key={index} className="listproduct-format-main1 ">
-              <img src={product.image} className="listproduct-image" />
-
-              <p>{product.name}</p>
-              <p>{product.category}</p>
-              <img
-                src={check_icon}
-                className="listproduct-tickmark"
-              />
+      <div className="container">
+        <Sidebar />
+        <div className="list-product">
+          <h1>Order Product List</h1>
+          {OrderProducts.map((product, index) => (
+  <div key={index} className="product-card">
+    <div className="product-details">
+      {product.items && product.items.length > 0 && (
+        <>
+          {product.items.map((item, itemIndex) => (
+            <div key={itemIndex}>
+              <p>Product Name: {item.description}</p>
+              <p>Quantity: {item.quantity}</p>
             </div>
-          );
-        })}
+          ))}
+        </>
+      )}
+      <p>Payment ID: {product.paymentId}</p>
+      <p>Payment Date: {new Date(product.date).toLocaleDateString()}</p>
+      <p>Payment Amount: ${product.amount}</p>
+    </div>
+    <hr />
+  </div>
+))}
+
+        </div>
       </div>
-    </div>
-    </div>
     </>
   );
 }
