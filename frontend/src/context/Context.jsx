@@ -57,7 +57,21 @@ const ShopContextProvider = (props) => {
         .then((data) => console.log(data));
     }
   };
-
+  // const clearCart = () => {
+  //   setCartItems(getDefaultCart());
+  //   if (localStorage.getItem("auth-token")) {
+  //     fetch("http://localhost:4000/clearcart", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "auth-token": `${localStorage.getItem("auth-token")}`,
+  //         accept: "application/form-data",
+  //       },
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => console.log(data));
+  //   }
+  // };
   const removeFromCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     if (localStorage.getItem("auth-token")) {

@@ -22,7 +22,7 @@ app.use(cors());
 //  now for monogodb, Data base connection
 
 const uri =
-    "mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+    "mongodb+srv://sg551666:9816156109@cluster0.tteekzl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"; 
 
 
 mongoose.connect(uri, {
@@ -140,13 +140,22 @@ const User = mongoose.model("user", {
     cartData: { type: Object },
 });
 //schema for payment success
+
+const { Schema } = require("mongoose");
+
+const ItemSchema = new Schema({
+    id: String,
+    description: String,
+    quantity: Number,
+})
+
 const Payment = mongoose.model("Payment", {
     user: { type: String, required: true },
     paymentId: { type: String, required: true },
     date: { type: Date, default: Date.now },
     amount : {type: Number, required: true},
     currency: {type: String, required: true},
-    item : {type: Array, required: true},
+    items : [ItemSchema],
 });
 
 //creating endpoint for registering the user
@@ -354,12 +363,18 @@ app.get('/success', async (req, res) => {
         }
 
         // Prepare payment details
+        const lineItemsArray = lineItems.data.map((item) => ({
+            // id: item.price.product_data.name,
+            description: item.description,   //product name
+            quantity: item.quantity
+        }));
+
         const paymentData = {
             user: sessionId, // Use session ID as the user identifier
             paymentId: paymentIntent.id,
             amount: session.amount_total / 100, // Convert amount to dollars
             currency: session.currency,
-            items: lineItems.data // Ensure items is correctly populated
+            items: lineItemsArray
         };
 
         console.log('Payment Data:', paymentData); // Log the payment data
@@ -382,7 +397,7 @@ app.get('/success', async (req, res) => {
     }
 });
 
-    app.get('/cancel', (req, res) => {
+    app.get('/cancel', (req, res) => { 
         res.redirect('/')
     })
 
