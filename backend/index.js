@@ -22,7 +22,7 @@ app.use(cors());
 //  now for monogodb, Data base connection
 
 const uri =
-    "mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+    "mongodb+srv://sg551666:9816156109@cluster0.tteekzl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 
 mongoose.connect(uri, {
@@ -140,13 +140,13 @@ const User = mongoose.model("user", {
     cartData: { type: Object },
 });
 //schema for payment success
-const Payment = mongoose.model("payment", {
+const Payment = mongoose.model("Payment", {
     user: { type: String, required: true },
     paymentId: { type: String, required: true },
     date: { type: Date, default: Date.now },
-    name: { type: String, required: true },
-    category: { type: String, required: true },
-    image: { type: String, required: true },
+    amount : {type: Number, required: true},
+    currency: {type: String, required: true},
+    item : {type: Array, required: true},
 });
 
 //creating endpoint for registering the user
@@ -323,13 +323,68 @@ app.post("/api/create-checkout-session", async (req, res) =>{
         payment_method_types: ["card"],
         line_items:lineItems,
         mode: "payment",
-        success_url: "http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}&order=${encodeURI(JSON.stringify(products))}",
+        success_url: "http://localhost:4000/success?session_id={CHECKOUT_SESSION_ID}&order=${encodeURI(JSON.stringify(products))}",
         cancel_url: "http://localhost:5173/cancel",
     });
 
     res.json({id: session.id})
 });
 
+// Payment success API
+app.get('/success', async (req, res) => {
+    try {
+        const sessionId = req.query.session_id;
+        const [session, lineItems] = await Promise.all([
+            stripe.checkout.sessions.retrieve(sessionId, { expand: ['payment_intent'] }),
+            stripe.checkout.sessions.listLineItems(sessionId)
+        ]);
+
+        console.log('Session:', session); // Log the session object
+        console.log('Line Items:', lineItems.data); // Log the line items data
+
+        const paymentIntent = session.payment_intent;
+        console.log('Payment Intent:', paymentIntent); // Log the payment intent object
+
+        if (!paymentIntent) {
+            throw new Error('Payment intent not found');
+        }
+
+        if (!lineItems.data || lineItems.data.length === 0) {
+            throw new Error('Line items not found or empty');
+        }
+
+        // Prepare payment details
+        const paymentData = {
+            user: sessionId, // Use session ID as the user identifier
+            paymentId: paymentIntent.id,
+            amount: session.amount_total / 100, // Convert amount to dollars
+            currency: session.currency,
+            items: lineItems.data // Ensure items is correctly populated
+        };
+
+        console.log('Payment Data:', paymentData); // Log the payment data
+
+        // Save payment details to the database
+        const payment = new Payment(paymentData);
+
+        try {
+            await payment.save();
+            console.log('Payment details saved:', payment);
+            res.send("Payment Success");
+        } catch (error) {
+            console.error('Error saving payment details:', error);
+            res.status(500).send('Error saving payment details');
+        }
+
+    } catch (error) {
+        console.error('Error retrieving payment details:', error);
+        res.status(500).send('Error retrieving payment details');
+    }
+});
+
+    app.get('/cancel', (req, res) => {
+        res.redirect('/')
+    })
 
 app.listen(port, (error) => {
     if (!error) {
