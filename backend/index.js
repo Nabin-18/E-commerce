@@ -303,7 +303,7 @@ app.get('/getcartdata', fetchUser, async (req, res) => {
 //     let userData = await User.findOne({ _id: req.user.id })
 //     res.json(userData.cartData);
 // })
-
+//commit check
 //checkout api
 app.post("/api/create-checkout-session", async (req, res) =>{
     const {products} = req.body;
