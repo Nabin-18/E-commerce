@@ -22,7 +22,7 @@ app.use(cors());
 //  now for monogodb, Data base connection
 
 const uri =
-    "mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";  
+    "mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"; 
 
 
 mongoose.connect(uri, {
@@ -80,15 +80,14 @@ const Product = mongoose.model("product", {
 
 app.post("/addproduct", upload.single("image"), async (req, res) => {
     let products = await Product.find({});
-    let id;
-    if (products.length > 0) {
-        let last_product_array = products.slice(-1);
-        let last_product = last_product_array[0];
-        id = last_product.id + 1;
-    }
-    else {
-        id = 1;
-    }
+let id;
+
+if (products.length > 0) {
+    let last_product = products[products.length - 1]; // Get the last product directly
+    id = parseInt(last_product.id, 10) + 1; // Convert the string to an integer before incrementing
+} else {
+    id = 1;
+}
     const product = new Product({
         id: id,
         name: req.body.name,
