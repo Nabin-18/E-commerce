@@ -14,8 +14,10 @@ import women_banner from './components/Assets/banner_women.png'
 import kids_banner from './components/Assets/banner_kids.png'
 
 import Success from './components/Success/Success'
+import Error from './components/Error/Error'
 import Cancel from './components/Cancel/Cancel'
-import PaymentSuccess from './components/Success/PaymentSuccess'
+import PaymentSuccess from './components/PaymentSuccess/PaymentSuccess'
+
 
 function App() {
   return (
@@ -24,9 +26,10 @@ function App() {
         <Navbar />
         <Routes>
           <Route path='/' element={<Shop />} />
-          
+
           <Route path='/payment-success' element={<PaymentSuccess />} />
           <Route path='/success' element= {<Success />} />
+          <Route path='/error' element= {<Error />} />
           <Route path='/cancel' element= {<Cancel />} />
           <Route path='/men' element={<ShopCatergory banner={men_banner} category={"men"} />} />
           <Route path='/women' element={<ShopCatergory banner={women_banner} category={"women"} />} />

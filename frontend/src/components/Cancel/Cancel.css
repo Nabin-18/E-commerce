@@ -1,0 +1,55 @@
+/* src/components/CancelPage.css */
+
+.cancel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f5f5f5;
+  }
+  
+  .cancel-content {
+    text-align: center;
+    background: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cancel-title {
+    font-size: 4rem;
+    color: #ff4d4d;
+    margin-bottom: 20px;
+  }
+  
+  .cancel-message {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .support-info {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  .support-info a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .support-info a:hover {
+    text-decoration: underline;
+  }
+  
+  .cancel-link {
+    font-size: 1.2rem;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .cancel-link:hover {
+    text-decoration: underline;
+  }
+  
