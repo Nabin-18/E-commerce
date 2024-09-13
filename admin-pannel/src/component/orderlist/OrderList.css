@@ -67,6 +67,14 @@
 .order-card-payment-amount {
   font-weight: bold;
 }
+.order-card-payment-name{
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #007bff;
+
+}
 
 /* Media Query for Small Screens */
 @media screen and (max-width: 800px) {

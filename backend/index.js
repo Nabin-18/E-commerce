@@ -261,6 +261,20 @@ const fetchUser = async (req, res, next) => {
     }
 }
 
+const fetchUserFromQuery = async (req, res, next) => {
+    const token = req.query.token;
+    if (!token) {
+        res.status(401).send({ error: "Please authenticate using a valid token" });
+    }
+    try {
+        const data = jwt.verify(token, "secret_key");
+        const user = await User.findOne({ _id: data.user.id });
+        req.user = user;
+        next();
+    } catch (error) {
+        res.send({ error: "Please authenticate using a valid token" });
+    }
+}
 
 
 //creating endpoint for addcart in mongodb
@@ -339,7 +353,7 @@ app.post("/api/create-checkout-session", async (req, res) =>{
 });
 
 // Payment success API
-app.get('/success', async (req, res) => {
+app.get('/success',fetchUserFromQuery, async (req, res) => {
     try {
         const sessionId = req.query.session_id;
         const [session, lineItems] = await Promise.all([
@@ -368,7 +382,7 @@ app.get('/success', async (req, res) => {
         }));
 
         const paymentData = {
-            user: sessionId, // Use session ID as the user identifier
+            user: req.user.name, // Use session ID as the user identifier
             paymentId: paymentIntent.id,
             amount: session.amount_total / 100, // Convert amount to dollars
             currency: session.currency,

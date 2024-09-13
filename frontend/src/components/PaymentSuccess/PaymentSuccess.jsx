@@ -11,7 +11,7 @@ const PaymentSuccess = () => {
       const sessionId = new URLSearchParams(window.location.search).get('session_id');
       
       try {
-        const response = await axios.get(`http://localhost:4000/success?session_id=${sessionId}`);
+        const response = await axios.get(`http://localhost:4000/success?session_id=${sessionId}&token=${localStorage.getItem('auth-token')}`);
         
         if (response.data.success) {
           // Redirect to success page

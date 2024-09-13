@@ -24,7 +24,8 @@ function OrderList() {
           {orderProducts.length > 0 ? (
             orderProducts.map((product, index) => (
               <div key={index} className="order-card">
-                <h2 className="order-card-title">Order #{index + 1}</h2>
+                <p className="order-card-payment-name">User Name: {product.user}</p>
+                <hr />
                 {product.items && product.items.length > 0 && (
                   <div className="order-card-items">
                     {product.items.map((item, itemIndex) => (
@@ -35,9 +36,11 @@ function OrderList() {
                     ))}
                   </div>
                 )}
+                
                 <p className="order-card-payment-id">Payment ID: {product.paymentId}</p>
                 <p className="order-card-payment-date">Payment Date: {new Date(product.date).toLocaleDateString()}</p>
                 <p className="order-card-payment-amount">Payment Amount: ${product.amount}</p>
+
               </div>
             ))
           ) : (
