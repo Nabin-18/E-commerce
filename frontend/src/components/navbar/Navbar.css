@@ -1,34 +1,38 @@
+/* Default styling for larger screens */
 .navbar {
   display: flex;
-  justify-content: space-around;
-  padding: 16px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 50px;
   box-shadow: 0 1px 3px -2px black;
-  height: 20vh;
+  height: 15vh;
   width: 100%;
- 
- 
+  background-color: #fff;
 }
+
 .nav-logo {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.nav-logo .logo-container {
+
+.logo-container {
   display: flex;
   align-items: center;
 }
+
 .logo-image {
-  margin-right: 8px; /* Adjust the spacing as needed */
-}
-.logo-text {
-  font-size: 1.5rem; /* Adjust the font size as needed */
+  height: 50px;
+  width: auto;
 }
 
-.nav-logo p {
-  color: #171717;
-  font-size: 38px;
+.logo-text {
+  font-size: 1.5rem;
   font-weight: 600;
+  color: #171717;
+  margin: 0;
 }
+
 .nav-menu {
   display: flex;
   align-items: center;
@@ -37,15 +41,18 @@
   color: #626262;
   font-size: 20px;
   font-weight: 500;
+  margin: 0;
+  padding: 0;
 }
+
 .nav-menu li {
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* Keep items in a row */
   align-items: center;
   justify-content: center;
-  gap: 3px;
   cursor: pointer;
 }
+
 .nav-menu hr {
   border: none;
   width: 80%;
@@ -53,11 +60,13 @@
   border-radius: 10px;
   background: red;
 }
+
 .nav-login-cart {
   display: flex;
   align-items: center;
   gap: 45px;
 }
+
 .nav-login-cart button {
   width: 120px;
   height: 40px;
@@ -71,46 +80,124 @@
   cursor: pointer;
 }
 
-.nav-login-cart button :active {
-  background-color: gray;
-  
+.cart-icon-container {
+  position: relative;
 }
+
 .nav-cart-count {
-  width: 22px;
-  height: 22px;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: -35px;
-  margin-left: -55px;
-  border-radius: 11px;
+  border-radius: 50%;
   background: red;
   color: white;
+  font-size: 12px;
+  font-weight: bold;
 }
-Link{
+
+.nav-login-cart img {
+  width: 40px;
+  height: 40px;
+}
+
+a {
   text-decoration: none;
-  list-style: none;
+  color: inherit;
 }
 
-
-/* 
-@media only screen and (max-width: 600px) {
+/* Responsive styling for screens between 600px and 800px */
+@media (min-width: 600px) and (max-width: 800px) {
   .navbar {
-    background-color: red;
+    padding: 10px;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
   }
- .nav-logo p {
-  color: #171717;
-  font-size: 20px;
-  font-weight: 600;
-}
-.nav-menu {
- 
-  gap: 8px;
-  color: #626262;
 
+  .nav-logo {
+    gap: 8px;
+    justify-content: center; /* Center the logo and text */
+  }
+
+  .logo-image {
+    height: 40px;
+  }
+
+  .logo-text {
+    font-size: 1.25rem;
+  }
+
+  .nav-menu {
+    gap: 20px; /* Reduce the gap between menu items */
+    font-size: 18px; /* Adjust the font size */
+    flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
+    justify-content: center; /* Center the menu items */
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-menu li {
+    margin: 0; /* Remove margin to avoid extra space */
+  }
+
+  .nav-login-cart {
+    gap: 20px;
+    flex-direction: row; /* Keep login and cart items in a row */
+    margin-top: 20px;
+  }
+
+  .nav-cart-count {
+    top: -8px;
+    right: -8px;
+  }
 }
-.nav-logo img{
-  height: 60px;
-  width: 60px;
+
+/* Responsive styling for screens below 600px */
+@media (max-width: 600px) {
+  .navbar {
+    padding: 10px;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
+
+  .nav-logo {
+    gap: 5px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .logo-image {
+    height: 35px;
+  }
+
+  .logo-text {
+    font-size: 1.125rem;
+  }
+
+  .nav-menu {
+    gap: 15px; /* Further reduce gap */
+    font-size: 16px; /* Adjust font size */
+    flex-wrap: wrap;
+    justify-content: center; /* Center the menu items */
+  }
+
+  .nav-menu li {
+    margin: 0; /* Remove margin */
+  }
+
+  .nav-login-cart {
+    gap: 15px;
+    flex-direction: row; /* Keep login and cart items in a row */
+  }
+
+  .nav-cart-count {
+    top: -6px;
+    right: -6px;
+  }
 }
-} */

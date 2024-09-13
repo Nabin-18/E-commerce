@@ -16,63 +16,51 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="nav-logo">
-        <a href="/" style={{ textDecoration: "none",}}>
-        <div className="logo-container">
-        <img src={logo} alt="logo" className = "logo-image" />
-        <p className="logo-text">SHOPPER</p> </div>
-        </a>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <div className="logo-container">
+            <img src={logo} alt="logo" className="logo-image" />
+            <p className="logo-text">SHOPPER</p>
+          </div>
+        </Link>
       </div>
       <ul className="nav-menu">
         <li>
           <Link to="/" style={{ textDecoration: "none" }}>
-            Shop
-          </Link>{" "}
-          {location.pathname === "shop" ? <hr /> : <></>}{" "}
+          Shop</Link>
+          {location.pathname === "/shop" && <hr />}
         </li>
         <li>
-          <Link to="/men" style={{ textDecoration: "none" }}>
-            Men
-          </Link>
-          {location.pathname === "/men" ? <hr /> : <></>}
+          <Link to="/men" style={{ textDecoration: "none" }}>Men</Link>
+          {location.pathname === "/men" && <hr />}
         </li>
         <li>
-          {" "}
-          <Link to="/women" style={{ textDecoration: "none" }}>
-            Women
-          </Link>
-          {location.pathname === "/women" ? <hr /> : <></>}
+          <Link to="/women" style={{ textDecoration: "none" }}>Women</Link>
+          {location.pathname === "/women" && <hr />}
         </li>
         <li>
-          {" "}
-          <Link to="kid" style={{ textDecoration: "none" }}>
-            Kid
-          </Link>{" "}
-          {location.pathname === "/kid" ? <hr /> : <></>}
+          <Link to="/kid" style={{ textDecoration: "none" }}>Kid</Link>
+          {location.pathname === "/kid" && <hr />}
         </li>
       </ul>
-      {/* //to logout, remove auth-token from the localStorage and navigate it into loginpage/signup page */}
+
       <div className="nav-login-cart">
         {localStorage.getItem("auth-token") ? (
-          <button
-            onClick={() => {
-              localStorage.removeItem("auth-token");
-              window.location.replace("/");
-            }}
-          >
+          <button onClick={() => {
+            localStorage.removeItem("auth-token");
+            window.location.replace("/");
+          }}>
             Log out
           </button>
         ) : (
           <Link to="/login" style={{ textDecoration: "none" }}>
-            {" "}
             <button>Login</button>
           </Link>
         )}
 
-        <Link to="/cart" style={{ textDecoration: "none" }}>
-          <img src={cart_icon} alt="" />
+        <Link to="/cart" style={{ textDecoration: "none" }} className="cart-icon-container">
+          <img src={cart_icon} alt="cart" />
+          <div className="nav-cart-count">{getTotalItem()}</div>
         </Link>
-
-        <div className="nav-cart-count">{getTotalItem()}</div>
       </div>
     </div>
   );
