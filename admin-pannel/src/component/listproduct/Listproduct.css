@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100;
+  width: 100%;
   height: 100%;
   padding: 10px 50px;
   margin: 30px;
@@ -18,34 +18,39 @@
 }
 .listproduct-format-main {
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(6, 1fr); /* Define 6 equal columns */
   gap: 10px;
-  padding: 20px 0px;
+  padding: 20px 0;
   width: 100%;
-  /* color: blue; */
   border-bottom: 1px solid #e0e0e0;
   font-weight: 600;
   font-size: 15px;
+  align-items: center;
 }
+
 .listproduct-format-main1 {
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(6, 1fr); /* Define 6 equal columns */
   gap: 10px;
-  padding: 20px 0px;
-  width: 100vw;
-
+  padding: 20px 0;
+  width: 100%;
   border-bottom: 1px solid #e0e0e0;
-  font-weight: 600;
+  font-weight: 400; /* Regular text */
   font-size: 15px;
-  /* background-color: red; */
-  overflow: hidden;
-}
-.listproduct-format {
   align-items: center;
-  font-weight: 500;
 }
-.listproduct-product-icon {
+
+.listproduct-image {
   height: 80px;
+  width: 80px;
+  object-fit: cover; /* Maintain aspect ratio */
+}
+
+.listproduct-format-main p,
+.listproduct-format-main1 p {
+  margin: 0;
+  display: flex;
+  align-items: center;
 }
 .listproduct-remove-icon {
   cursor: pointer;
@@ -54,17 +59,24 @@
 .listproduct-remove-icon:hover {
   color: red;
 }
+
+.listproduct-remove-icon:focus {
+  outline: 2px solid #007bff;
+}
+
 .listproduct-allproduct {
   overflow-y: auto;
 }
-.listproduct-image {
-  height: 80px;
-  width: 80px;
+
+@media screen and (max-width: 1100px) {
+  .listproduct-format-main,
+  .listproduct-format-main1 {
+    grid-template-columns: 1fr 3fr 1fr 1fr 1fr 1fr; /* Adjust for smaller screens */
+  }
 }
 
 @media screen and (max-width: 800px) {
   .container {
-    display: flex;
     flex-direction: column;
   }
   .list-product {
@@ -73,7 +85,7 @@
     width: auto;
   }
   .listproduct-format-main1 {
-    padding: 15px 0px;
+    padding: 15px 0;
   }
   .listproduct-product-icon {
     height: 60px;
