@@ -15,6 +15,7 @@ import kids_banner from './components/Assets/banner_kids.png'
 
 import Success from './components/Success/Success'
 import Cancel from './components/Cancel/Cancel'
+import PaymentSuccess from './components/Success/PaymentSuccess'
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
         <Navbar />
         <Routes>
           <Route path='/' element={<Shop />} />
+          
+          <Route path='/payment-success' element={<PaymentSuccess />} />
           <Route path='/success' element= {<Success />} />
           <Route path='/cancel' element= {<Cancel />} />
           <Route path='/men' element={<ShopCatergory banner={men_banner} category={"men"} />} />

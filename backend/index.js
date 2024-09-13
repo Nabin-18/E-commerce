@@ -331,7 +331,7 @@ app.post("/api/create-checkout-session", async (req, res) =>{
         payment_method_types: ["card"],
         line_items:lineItems,
         mode: "payment",
-        success_url: "http://localhost:4000/success?session_id={CHECKOUT_SESSION_ID}&order=${encodeURI(JSON.stringify(products))}",
+        success_url: "http://localhost:5173/payment-success?session_id={CHECKOUT_SESSION_ID}",
         cancel_url: "http://localhost:5173/cancel",
     });
 
@@ -363,7 +363,6 @@ app.get('/success', async (req, res) => {
 
         // Prepare payment details
         const lineItemsArray = lineItems.data.map((item) => ({
-            // id: item.price.product_data.name,
             description: item.description,   //product name
             quantity: item.quantity
         }));
@@ -380,11 +379,13 @@ app.get('/success', async (req, res) => {
 
         // Save payment details to the database
         const payment = new Payment(paymentData);
-
+            
         try {
             await payment.save();
             console.log('Payment details saved:', payment);
-            res.send("Payment Success");
+            
+            res.json({ success: true });
+            
         } catch (error) {
             console.error('Error saving payment details:', error);
             res.status(500).send('Error saving payment details');
