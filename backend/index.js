@@ -22,7 +22,7 @@ app.use(cors());
 //  now for monogodb, Data base connection
 
 const uri =
-    "mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"; 
+    "mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 
 mongoose.connect(uri, {
@@ -80,14 +80,14 @@ const Product = mongoose.model("product", {
 
 app.post("/addproduct", upload.single("image"), async (req, res) => {
     let products = await Product.find({});
-let id;
+    let id;
 
-if (products.length > 0) {
-    let last_product = products[products.length - 1]; // Get the last product directly
-    id = parseInt(last_product.id, 10) + 1; // Convert the string to an integer before incrementing
-} else {
-    id = 1;
-}
+    if (products.length > 0) {
+        let last_product = products[products.length - 1]; // Get the last product directly
+        id = parseInt(last_product.id, 10) + 1; // Convert the string to an integer before incrementing
+    } else {
+        id = 1;
+    }
     const product = new Product({
         id: id,
         name: req.body.name,
@@ -153,10 +153,10 @@ const Payment = mongoose.model("Payment", {
     user: { type: String, required: true },
     paymentId: { type: String, required: true },
     date: { type: Date, default: Date.now },
-    amount : {type: Number, required: true},
-    currency: {type: String, required: true},
-    ph_num: {type: String, required: true},
-    items : [ItemSchema],
+    amount: { type: Number, required: true },
+    currency: { type: String, required: true },
+    ph_num: { type: String, required: true },
+    items: [ItemSchema],
 });
 
 //creating endpoint for registering the user
@@ -381,7 +381,7 @@ app.get('/success',fetchUserFromQuery, async (req, res) => {
         }));
 
         const paymentData = {
-            user: req.user.name, 
+            user: req.user.name,
             ph_num: req.ph_no,
             paymentId: paymentIntent.id,
             amount: session.amount_total / 100, // Convert amount to dollars
@@ -393,13 +393,13 @@ app.get('/success',fetchUserFromQuery, async (req, res) => {
 
         // Save payment details to the database
         const payment = new Payment(paymentData);
-            
+
         try {
             await payment.save();
             console.log('Payment details saved:', payment);
-            
+
             res.json({ success: true });
-            
+
         } catch (error) {
             console.error('Error saving payment details:', error);
             res.status(500).send('Error saving payment details');
@@ -411,20 +411,34 @@ app.get('/success',fetchUserFromQuery, async (req, res) => {
     }
 });
 
-    app.get('/cancel', (req, res) => { 
-        res.redirect('/')
-    })
+app.get('/cancel', (req, res) => {
+    res.redirect('/')
+})
 
-    //get the payment data from database 
-    app.get('/getpaymentdata', async (req, res) => {
-        try {
-            const paymentData = await Payment.find({});
-            res.json(paymentData);
-        } catch (error) {
-            console.error('Error fetching payment data:', error);
-            res.status(500).send('Error fetching payment data');
-        }
-    });
+//get the payment data from database 
+app.get('/getpaymentdata', async (req, res) => {
+    try {
+        const paymentData = await Payment.find({});
+        res.json(paymentData);
+    } catch (error) {
+        console.error('Error fetching payment data:', error);
+        res.status(500).send('Error fetching payment data');
+    }
+});
+
+
+app.post('/clearcart', fetchUser, async (req, res) => {
+    try {
+        await
+            User.findOneAndUpdate({ _id: req.user.id }, { cartData: {} });
+        res.send({ success: true, message: "Cart cleared successfully" });
+    } catch (error) {
+        console.error("Error clearing cart:", error);
+        res.status(500).send({ success: false, message: "Internal Server Error" });
+    }
+}
+);
+
 app.listen(port, (error) => {
     if (!error) {
         console.log("server running on ", port);

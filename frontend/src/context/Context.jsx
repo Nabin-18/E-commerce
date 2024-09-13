@@ -39,9 +39,9 @@ const ShopContextProvider = (props) => {
         });
     }
   }, []);
-//currently addTocart is not working properly
+
   const addToCart = (itemId) => {
-    console.log("Button clicked")
+    console.log("Button clicked");
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     if (localStorage.getItem("auth-token")) {
       fetch("http://localhost:4000/addtocart", {
@@ -57,21 +57,7 @@ const ShopContextProvider = (props) => {
         .then((data) => console.log(data));
     }
   };
-  // const clearCart = () => {
-  //   setCartItems(getDefaultCart());
-  //   if (localStorage.getItem("auth-token")) {
-  //     fetch("http://localhost:4000/clearcart", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "auth-token": `${localStorage.getItem("auth-token")}`,
-  //         accept: "application/form-data",
-  //       },
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => console.log(data));
-  //   }
-  // };
+
   const removeFromCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     if (localStorage.getItem("auth-token")) {
@@ -89,21 +75,21 @@ const ShopContextProvider = (props) => {
     }
   };
 
-  // const getTotalCartAmount = () => {
-  //   let totalamount = 0;
-  //   for (const item in cartItems) {
-  //     if (cartItems[item] > 0) {
-  //       let itemInfo = all_product.find(
-  //         (product) => product.id === Number(item)
-        
-  //       );
-         
-
-  //       totalamount += itemInfo.new_price * cartItems[item];
-  //     }
-  //   }
-  //   return totalamount;
-  // };
+  const clearCart = () => {
+    setCartItems(getDefaultCart());
+    if (localStorage.getItem("auth-token")) {
+      fetch("http://localhost:4000/clearcart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          accept: "application/form-data",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+    }
+  };
 
   const getTotalCartAmount = () => {
     let totalamount = 0;
@@ -128,7 +114,6 @@ const ShopContextProvider = (props) => {
       }
     }
     return totalItem;
-    
   };
 
   const contextValue = {
@@ -139,6 +124,7 @@ const ShopContextProvider = (props) => {
     addToCart,
     removeFromCart,
     getTotalCartAmount,
+    clearCart,
   };
 
   return (

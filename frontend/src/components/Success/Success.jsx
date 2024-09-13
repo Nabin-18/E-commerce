@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./Success.css";
+import { ShopContext } from "../../context/Context";
 
 const Success = () => {
   const navigate = useNavigate();
+  const { clearCart } = useContext(ShopContext);
 
   // Handle button click to navigate to home or any other route
   const handleGoHome = () => {
@@ -19,6 +21,7 @@ const Success = () => {
       .then((res) => res.json())
       .then((data) => setPaymentData(data));
     console.log(paymentData);
+    clearCart();
   }, []);
 
   return (
