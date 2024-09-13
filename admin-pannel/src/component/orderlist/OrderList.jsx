@@ -25,6 +25,7 @@ function OrderList() {
             orderProducts.map((product, index) => (
               <div key={index} className="order-card">
                 <p className="order-card-payment-name">User Name: {product.user}</p>
+                <p className="order-card-payment-ph_num">Contact Detail: {product.ph_num}</p>
                 <hr />
                 {product.items && product.items.length > 0 && (
                   <div className="order-card-items">

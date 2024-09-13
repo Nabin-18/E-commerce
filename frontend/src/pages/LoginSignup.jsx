@@ -7,6 +7,7 @@ function LoginSignup() {
     name: "",
     password: "",
     email: "",
+    ph_no: "",
   });
   const changeHandler = (e) => {
     setFormData({
@@ -67,13 +68,22 @@ function LoginSignup() {
         <h1>{state}</h1>
         <div className="loginsignup-fields">
           {state === "Sign Up" ? (
-            <input
-              name="name"
-              value={formData.name}
-              onChange={changeHandler}
-              type="text"
-              placeholder="Your name"
-            />
+            <>
+              <input
+                name="name"
+                value={formData.name}
+                onChange={changeHandler}
+                type="text"
+                placeholder="Your name"
+              />
+              <input
+                name="ph_no"
+                value={formData.ph_no}
+                onChange={changeHandler}
+                type="number"
+                placeholder="Phone Number"
+              />
+            </>
           ) : (
             <></>
           )}
@@ -84,6 +94,7 @@ function LoginSignup() {
             type="email"
             placeholder="Email address"
           />
+          
           <input
             name="password"
             value={formData.password}

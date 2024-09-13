@@ -134,6 +134,7 @@ app.get("/allproduct", async (req, res) => {
 const User = mongoose.model("user", {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
+    ph_no: { type: String, required: true },
     password: { type: String, required: true },
     date: { type: Date, default: Date.now },
     cartData: { type: Object },
@@ -154,6 +155,7 @@ const Payment = mongoose.model("Payment", {
     date: { type: Date, default: Date.now },
     amount : {type: Number, required: true},
     currency: {type: String, required: true},
+    ph_num: {type: String, required: true},
     items : [ItemSchema],
 });
 
@@ -173,6 +175,7 @@ app.post("/signup", async (req, res) => {
     const user = new User({
         name: req.body.name,
         email: req.body.email,
+        ph_no: req.body.ph_no,
         password: req.body.password,
         cartData: cart,
     });
@@ -269,7 +272,9 @@ const fetchUserFromQuery = async (req, res, next) => {
     try {
         const data = jwt.verify(token, "secret_key");
         const user = await User.findOne({ _id: data.user.id });
+        const ph_no = user.ph_no;
         req.user = user;
+        req.ph_no = ph_no;
         next();
     } catch (error) {
         res.send({ error: "Please authenticate using a valid token" });
@@ -320,12 +325,7 @@ app.get('/getcartdata', fetchUser, async (req, res) => {
         res.status(500).send({ success: false, message: "Internal Server Error" });
     }
 });
-// app.get('/getcartdata', fetchUser, async (req, res) => {
-//     console.log("cart data fetched");
-//     let userData = await User.findOne({ _id: req.user.id })
-//     res.json(userData.cartData);
-// })
-//commit check
+
 //checkout api
 app.post("/api/create-checkout-session", async (req, res) =>{
     const {products} = req.body;
@@ -360,11 +360,10 @@ app.get('/success',fetchUserFromQuery, async (req, res) => {
             stripe.checkout.sessions.retrieve(sessionId, { expand: ['payment_intent'] }),
             stripe.checkout.sessions.listLineItems(sessionId)
         ]);
-
-        console.log('Session:', session); // Log the session object
         console.log('Line Items:', lineItems.data); // Log the line items data
 
         const paymentIntent = session.payment_intent;
+
         console.log('Payment Intent:', paymentIntent); // Log the payment intent object
 
         if (!paymentIntent) {
@@ -382,7 +381,8 @@ app.get('/success',fetchUserFromQuery, async (req, res) => {
         }));
 
         const paymentData = {
-            user: req.user.name, // Use session ID as the user identifier
+            user: req.user.name, 
+            ph_num: req.ph_no,
             paymentId: paymentIntent.id,
             amount: session.amount_total / 100, // Convert amount to dollars
             currency: session.currency,

@@ -30,14 +30,6 @@ const Success = () => {
             Thank you for your purchase! Your payment has been processed
             successfully.
           </p>
-
-          <div className="payment-details">
-            <h2>Payment Details</h2>
-            <p>Payment ID: {paymentData.paymentId}</p>
-            <p>Payment Date: {paymentData.date}</p>
-            <p>Payment Amount: ${paymentData.amount}</p>
-            {/* <p>Product Item:{paymentData.items.description}</p> */}
-          </div>
           <button className="go-home-button" onClick={handleGoHome}>
             Go to Home
           </button>

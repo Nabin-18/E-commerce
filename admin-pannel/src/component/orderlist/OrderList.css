@@ -75,6 +75,13 @@
   color: #007bff;
 
 }
+.order-card-payment-ph_num{
+  font-size: 1.02rem;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #080d11;
+}
 
 /* Media Query for Small Screens */
 @media screen and (max-width: 800px) {
