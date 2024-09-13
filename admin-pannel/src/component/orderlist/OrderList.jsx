@@ -8,7 +8,11 @@ function OrderList() {
   useEffect(() => {
     fetch("http://localhost:4000/getpaymentdata")
       .then((response) => response.json())
-      .then((data) => setOrderProducts(data));
+      .then((data) => {
+        // Sort orders by date in descending order
+        const sortedOrders = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        setOrderProducts(sortedOrders);
+      });
   }, []);
 
   return (
