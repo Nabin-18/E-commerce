@@ -2,10 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: calc(100% - 250px); /* Adjust for sidebar width */
+  max-width: calc(1200px - 250px); /* Adjust for sidebar width */
   height: 100%;
-  padding: 10px 50px;
-  margin: 30px;
+  padding: 20px;
+  margin: 30px auto; /* Center the container */
   border-radius: 6px;
   background: white;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
@@ -16,10 +17,17 @@
   width: 100%;
   height: 100%;
 }
+
+/* Ensure sidebar does not get affected */
+.sidebar {
+  width: 250px;
+}
+
+/* Grid layout for headers */
 .listproduct-format-main {
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* Define 6 equal columns */
-  gap: 10px;
+  grid-template-columns: repeat(6, minmax(0, 1fr)); /* Define 6 equal columns with flexible width */
+  gap: 15px; /* Adjust spacing */
   padding: 20px 0;
   width: 100%;
   border-bottom: 1px solid #e0e0e0;
@@ -30,8 +38,8 @@
 
 .listproduct-format-main1 {
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* Define 6 equal columns */
-  gap: 10px;
+  grid-template-columns: repeat(6, minmax(0, 1fr)); /* Define 6 equal columns with flexible width */
+  gap: 15px;
   padding: 20px 0;
   width: 100%;
   border-bottom: 1px solid #e0e0e0;
@@ -41,8 +49,8 @@
 }
 
 .listproduct-image {
-  height: 80px;
-  width: 80px;
+  max-height: 80px;
+  max-width: 80px;
   object-fit: cover; /* Maintain aspect ratio */
 }
 
@@ -64,14 +72,15 @@
   outline: 2px solid #007bff;
 }
 
-.listproduct-allproduct {
+.listproduct-allproducts {
+  width: 100%;
   overflow-y: auto;
 }
 
 @media screen and (max-width: 1100px) {
   .listproduct-format-main,
   .listproduct-format-main1 {
-    grid-template-columns: 1fr 3fr 1fr 1fr 1fr 1fr; /* Adjust for smaller screens */
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr; /* Adjust column widths for smaller screens */
   }
 }
 
@@ -80,17 +89,18 @@
     flex-direction: column;
   }
   .list-product {
+    width: auto;
     padding: 30px;
     margin: 20px;
-    width: auto;
   }
   .listproduct-format-main1 {
     padding: 15px 0;
   }
-  .listproduct-product-icon {
-    height: 60px;
-    margin: 0 30px;
+  .listproduct-image {
+    max-height: 60px; /* Smaller size for small screens */
+    max-width: 60px;
   }
+
   .listproduct-remove-icon {
     margin: 0 10px;
   }
