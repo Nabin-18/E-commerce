@@ -1,5 +1,5 @@
 .hero {
-  height: 75vh;
+  height: 80vh;
   background: rgba(233, 152, 1, 0.5);
   display: flex;
   width: 100vw;
@@ -13,7 +13,7 @@
   justify-content: center;
   gap: 20px;
   padding: 0 100px;
-  /* background-color: rebeccapurple; */
+ 
   line-height: 1.1;
   height: 90vh;
 }
@@ -54,8 +54,8 @@
 }
 .hero-right {
   flex: 1;
-  height: 75vh;
-  /* background-color: green; */
+  height: 80vh;
+ 
 }
 .hero-right img {
   height: 100%;
