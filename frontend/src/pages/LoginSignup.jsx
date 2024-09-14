@@ -1,150 +1,139 @@
-import React from "react";
+import React, { Component } from "react";
 import "./CSS/Loginsignup.css";
 
-function LoginSignup() {
-  const [state, setState] = React.useState("Login");
-  const [formData, setFormData] = React.useState({
-    name: "",
-    password: "",
-    email: "",
-    ph_no: "",
-  });
-  const changeHandler = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+class LoginSignup extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      authMode: "Login", // Toggle between "Login" and "Sign Up"
+      formData: {
+        name: "",
+        ph_no: "",
+        email: "",
+        password: "",
+      },
+      error: null
+    };
+  }
+
+  changeHandler = (e) => {
+    this.setState({
+      formData: {
+        ...this.state.formData,
+        [e.target.name]: e.target.value,
+      },
     });
   };
 
-  const login = async () => {
-    console.log("login function called", formData);
+  submitForm = async (url) => {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(this.state.formData),
+      });
+      const responseData = await response.json();
 
-    let responseData;
-
-    await fetch("http://localhost:4000/login", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
-    if (responseData.success) {
-      console.log("User created successfully");
-      localStorage.setItem("auth-token", responseData.token);
-      window.location.replace("/");
-    } else {
-      alert(responseData.error);
-    }
-  };
-  const signup = async () => {
-    console.log("signup function called", formData);
-    let responseData;
-
-    await fetch("http://localhost:4000/signup", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
-    if (responseData.success) {
-      console.log("User created successfully");
-      localStorage.setItem("auth-token", responseData.token);
-      window.location.replace("/");
-    } else {
-      alert(responseData.error);
+      if (responseData.success) {
+        localStorage.setItem("auth-token", responseData.token);
+        window.location.replace("/");
+      } else {
+        this.setState({ error: responseData.error });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      this.setState({ error: 'An error occurred. Please try again.' });
     }
   };
 
-  return (
-    <div className="loginsignup">
-      <div className="loginsignup-container">
-        <h1>{state}</h1>
-        <div className="loginsignup-fields">
-          {state === "Sign Up" ? (
-            <>
-              <input
-                name="name"
-                value={formData.name}
-                onChange={changeHandler}
-                type="text"
-                placeholder="Your name"
-              />
-              <input
-                name="ph_no"
-                value={formData.ph_no}
-                onChange={changeHandler}
-                type="number"
-                placeholder="Phone Number"
-              />
-            </>
-          ) : (
-            <></>
-          )}
-          <input
-            name="email"
-            value={formData.email}
-            onChange={changeHandler}
-            type="email"
-            placeholder="Email address"
-          />
-          
-          <input
-            name="password"
-            value={formData.password}
-            onChange={changeHandler}
-            type="password"
-            placeholder="Password"
-          />
-          <button
-            onClick={() => {
-              state === "Login" ? login() : signup();
-            }}
-          >
-            Continue
-          </button>
-          {state === "Sign Up" ? (
-            <p className="loginsignup-login">
-              Already have an account ?
-              <span
-                onClick={() => {
-                  setState("Login");
-                }}
-              >
-                {" "}
-                Login here
-              </span>
-            </p>
-          ) : (
-            <p className="loginsignup-login">
-              Create an account ?
-              <span
-                onClick={() => {
-                  setState("Sign Up");
-                }}
-              >
-                {" "}
-                Click here
-              </span>
-            </p>
-          )}
+  login = async (e) => {
+    e.preventDefault();
 
-          <div className="loginsignup-agree">
-            <input type="checkbox"  />
-            <p>
-              By Continue,I agree to the terms & privacy policy of the company{" "}
-            </p>
+    // Check for empty fields
+    const { email, password } = this.state.formData;
+    if (!email || !password) {
+      this.setState({ error: "Please fill in both email and password." });
+      return;
+    }
+
+    // Proceed with login request
+    this.submitForm("http://localhost:4000/login");
+  };
+
+  signup = async (e) => {
+    e.preventDefault();
+
+    // Check for empty fields
+    const { name, ph_no, email, password } = this.state.formData;
+    if (!name || !ph_no || !email || !password) {
+      this.setState({ error: "Please fill in all fields." });
+      return;
+    }
+
+    // Proceed with signup request
+    this.submitForm("http://localhost:4000/signup");
+  };
+
+  toggleAuthMode = () => {
+    this.setState({
+      authMode: this.state.authMode === "Login" ? "Sign Up" : "Login",
+      error: null // Clear error message when toggling
+    });
+  };
+
+  render() {
+    return (
+      <div className="loginsignup">
+        <div className="loginsignup-container">
+          <h1>{this.state.authMode}</h1>
+          {this.state.error && <p className="error">{this.state.error}</p>}
+          <div className="loginsignup-fields">
+            {this.state.authMode === "Sign Up" && (
+              <>
+                <input
+                  name="name"
+                  value={this.state.formData.name}
+                  onChange={this.changeHandler}
+                  type="text"
+                  placeholder="Your name"
+                />
+                <input
+                  name="ph_no"
+                  value={this.state.formData.ph_no}
+                  onChange={this.changeHandler}
+                  type="number"
+                  placeholder="Phone Number"
+                />
+              </>
+            )}
+            <input
+              name="email"
+              value={this.state.formData.email}
+              onChange={this.changeHandler}
+              type="email"
+              placeholder="Email address"
+            />
+            <input
+              name="password"
+              value={this.state.formData.password}
+              onChange={this.changeHandler}
+              type="password"
+              placeholder="Password"
+            />
+            <button onClick={this.state.authMode === "Login" ? this.login : this.signup}>
+              {this.state.authMode}
+            </button>
+            <button onClick={this.toggleAuthMode}>
+              {this.state.authMode === "Login" ? "Switch to Sign Up" : "Switch to Login"}
+            </button>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default LoginSignup;

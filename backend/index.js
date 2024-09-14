@@ -9,6 +9,7 @@ const path = require("path");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
 const { connect } = require("http2");
+const bcrypt = require('bcrypt');
 const stripe = require("stripe")("sk_test_51PxtJ5RqdVllZqdP8V0okBG9oryNUGgN2zHFgd5TAnT5HK4APlQyqsaUuCY1hFcQHypVOsCPG1QF7A4agEBEnI2700PyRUkrFJ")
 
 
@@ -22,7 +23,7 @@ app.use(cors());
 //  now for monogodb, Data base connection
 
 const uri =
-    "mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+    "mongodb+srv://sg551666:9816156109@cluster0.tteekzl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 
 mongoose.connect(uri, {
@@ -172,11 +173,14 @@ app.post("/signup", async (req, res) => {
     for (let i = 0; i < 300; i++) {
         cart[i] = 0;
     }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
     const user = new User({
         name: req.body.name,
         email: req.body.email,
         ph_no: req.body.ph_no,
-        password: req.body.password,
+        password: hashedPassword,
         cartData: cart,
     });
 
@@ -198,35 +202,43 @@ app.post("/signup", async (req, res) => {
 //creating user login endpoint
 
 app.post("/login", async (req, res) => {
-    let user = await User.findOne({ email: req.body.email });
-    if (user) {
-        const passwordCompare = req.body.password === user.password;
+    try {
+        let user = await User.findOne({ email: req.body.email });
+        if (user) {
+            // Compare the plain text password with the hashed password
+            const passwordCompare = await bcrypt.compare(req.body.password, user.password);
 
-        if (passwordCompare) {
-            const data = {
-                user: {
-                    id: user.id,
-                },
-            };
+            if (passwordCompare) {
+                const data = {
+                    user: {
+                        id: user.id,
+                    },
+                };
 
-            const token = jwt.sign(data, "secret_key");
-            return res.json({
-                success: true,
-                message: "User logged in successfully",
-                token: token,
-            });
+                const token = jwt.sign(data, "secret_key");
+                return res.json({
+                    success: true,
+                    message: "User logged in successfully",
+                    token: token,
+                });
+            } else {
+                return res.json({
+                    success: false,
+                    message: "Wrong email or password",
+                });
+            }
         } else {
+            // If user is not available
             return res.json({
                 success: false,
-                message: "Wrong email or password",
+                message: "User not found",
             });
         }
-    }
-    //if user is not available
-    else {
-        res.json({
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
             success: false,
-            message: "User not found",
+            message: "Internal server error",
         });
     }
 });
@@ -252,15 +264,18 @@ app.get("/popularinwoman", async (req, res) => {
 const fetchUser = async (req, res, next) => {
     const token = req.header("auth-token");
     if (!token) {
-        res.status(401).send({ error: "Please authenticate using a valid token" });
+        return res.status(401).send({ error: "Please authenticate using a valid token" });
     }
     try {
         const data = jwt.verify(token, "secret_key");
         const user = await User.findOne({ _id: data.user.id });
+        if (!user) {
+            return res.status(401).send({ error: "User not found" });
+        }
         req.user = user;
         next();
     } catch (error) {
-        res.send({ error: "Please authenticate using a valid token" });
+        return res.status(401).send({ error: "Please authenticate using a valid token" });
     }
 }
 
