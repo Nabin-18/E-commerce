@@ -52,6 +52,9 @@
   justify-content: center;
   cursor: pointer;
 }
+.nav-menu li:hover {
+  color: red;
+}
 
 .nav-menu hr {
   border: none;
@@ -140,10 +143,12 @@ a {
     margin: 0;
     padding: 0;
   }
+  
 
   .nav-menu li {
     margin: 0; /* Remove margin to avoid extra space */
   }
+  
 
   .nav-login-cart {
     gap: 20px;

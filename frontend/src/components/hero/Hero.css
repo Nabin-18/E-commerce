@@ -1,6 +1,6 @@
 .hero {
-  height: fit-content;
-  background: rgb(170, 230, 170);
+  height: 75vh;
+  background: rgba(233, 152, 1, 0.5);
   display: flex;
   width: 100vw;
   justify-content: center;
@@ -15,7 +15,7 @@
   padding: 0 100px;
   /* background-color: rebeccapurple; */
   line-height: 1.1;
-  height: 100vh;
+  height: 90vh;
 }
 .hero-left h2 {
   color: #090909;
@@ -53,10 +53,8 @@
   cursor: pointer;
 }
 .hero-right {
-  display: flex;
   flex: 1;
-  align-items: center;
-  justify-content: center;
+  height: 75vh;
   /* background-color: green; */
 }
 .hero-right img {

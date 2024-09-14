@@ -7,8 +7,6 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
-const { v4: uuidv4 } = require("uuid");
-const { connect } = require("http2");
 const bcrypt = require('bcrypt');
 const stripe = require("stripe")("sk_test_51PxtJ5RqdVllZqdP8V0okBG9oryNUGgN2zHFgd5TAnT5HK4APlQyqsaUuCY1hFcQHypVOsCPG1QF7A4agEBEnI2700PyRUkrFJ")
 
@@ -23,7 +21,7 @@ app.use(cors());
 //  now for monogodb, Data base connection
 
 const uri =
-    "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.1";
+    "mongodb+srv://sg551666:RIViyZZefXEopeI6@cluster0.lik4r.mongodb.net/";
 
 
 mongoose.connect(uri, {
