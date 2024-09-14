@@ -9,8 +9,8 @@ function Item(props) {
       </Link>
       <p>{props.name}</p>
       <div className="item-prices">
-        <div className="item-price-new"> New Price ${props.new_price}</div>
         <div className="item-price-old"> Old Price ${props.old_price}</div>
+        <div className="item-price-new"> New Price ${props.new_price}</div>
       </div>
     
       <div className="item-description">
