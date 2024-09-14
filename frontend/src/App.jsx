@@ -12,7 +12,6 @@ import Footer from './components/Footer/Footer'
 import men_banner from './components/Assets/men.png'
 import women_banner from './components/Assets/women.png'
 import kids_banner from './components/Assets/kid.png'
-
 import Success from './components/Success/Success'
 import Error from './components/Error/Error'
 import Cancel from './components/Cancel/Cancel'
