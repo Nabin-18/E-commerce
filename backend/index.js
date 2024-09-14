@@ -23,7 +23,7 @@ app.use(cors());
 //  now for monogodb, Data base connection
 
 const uri =
-    "mongodb+srv://sg551666:9816156109@cluster0.tteekzl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+    "mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 
 mongoose.connect(uri, {
@@ -44,6 +44,8 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
     res.send("Express app is running ");
 });
+
+
 //Image storage engine using multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -111,7 +113,10 @@ app.post("/addproduct", upload.single("image"), async (req, res) => {
         name: req.body.name,
     });
 });
-
+let initialCartData = {};
+    for (let i = 0; i < 300; i++) {
+        initialCartData[i] = 0;
+    }
 // creating api for deleting product
 
 app.delete("/deleteproduct", async (req, res) => {
@@ -169,10 +174,7 @@ app.post("/signup", async (req, res) => {
             message: "User already exists",
         });
     }
-    let cart = {};
-    for (let i = 0; i < 300; i++) {
-        cart[i] = 0;
-    }
+    
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
@@ -181,7 +183,7 @@ app.post("/signup", async (req, res) => {
         email: req.body.email,
         ph_no: req.body.ph_no,
         password: hashedPassword,
-        cartData: cart,
+        cartData: initialCartData,
     });
 
     await user.save();
@@ -442,10 +444,11 @@ app.get('/getpaymentdata', async (req, res) => {
 });
 
 
+
 app.post('/clearcart', fetchUser, async (req, res) => {
     try {
         await
-            User.findOneAndUpdate({ _id: req.user.id }, { cartData: {} });
+            User.findOneAndUpdate({ _id: req.user.id }, { cartData: initialCartData });
         res.send({ success: true, message: "Cart cleared successfully" });
     } catch (error) {
         console.error("Error clearing cart:", error);
