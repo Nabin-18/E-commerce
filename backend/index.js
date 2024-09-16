@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cors());
 // it is used to connect with express
 
-//  now for monogodb, Data base connection
+//  Data base connection
 
 const uri =
    "mongodb+srv://Nabinkhanal:2004-03-01@cluster0.tyixfse.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
