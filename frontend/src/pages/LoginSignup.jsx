@@ -12,7 +12,7 @@ class LoginSignup extends Component {
         email: "",
         password: "",
       },
-      error: null
+      error: null,
     };
   }
 
@@ -44,8 +44,8 @@ class LoginSignup extends Component {
         this.setState({ error: responseData.error });
       }
     } catch (error) {
-      console.error('Error:', error);
-      this.setState({ error: 'An error occurred. Please try again.' });
+      console.error("Error:", error);
+      this.setState({ error: "An error occurred. Please try again." });
     }
   };
 
@@ -60,7 +60,7 @@ class LoginSignup extends Component {
     }
 
     // Proceed with login request
-    this.submitForm("http://localhost:4000/login");
+    this.submitForm("https://e-commerce-9u9h.onrender.com/login");
   };
 
   signup = async (e) => {
@@ -74,13 +74,13 @@ class LoginSignup extends Component {
     }
 
     // Proceed with signup request
-    this.submitForm("http://localhost:4000/signup");
+    this.submitForm("https://e-commerce-9u9h.onrender.com/signup");
   };
 
   toggleAuthMode = () => {
     this.setState({
       authMode: this.state.authMode === "Login" ? "Sign Up" : "Login",
-      error: null // Clear error message when toggling
+      error: null, // Clear error message when toggling
     });
   };
 
@@ -123,11 +123,17 @@ class LoginSignup extends Component {
               type="password"
               placeholder="Password"
             />
-            <button onClick={this.state.authMode === "Login" ? this.login : this.signup}>
+            <button
+              onClick={
+                this.state.authMode === "Login" ? this.login : this.signup
+              }
+            >
               {this.state.authMode}
             </button>
             <button onClick={this.toggleAuthMode}>
-              {this.state.authMode === "Login" ? "Switch to Sign Up" : "Switch to Login"}
+              {this.state.authMode === "Login"
+                ? "Switch to Sign Up"
+                : "Switch to Login"}
             </button>
           </div>
         </div>

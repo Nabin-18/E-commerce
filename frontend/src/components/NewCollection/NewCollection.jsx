@@ -6,11 +6,9 @@ import Item from "../Item/Item";
 function NewCollection() {
   const [newcollection, setNewcollection] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:4000/newcollection")
+    fetch("https://e-commerce-9u9h.onrender.com/newcollection")
       .then((res) => res.json())
       .then((data) => setNewcollection(data));
-    
-      
   }, []);
   //    when we add a new product to admin pannel , collection will be occcur on newcollection section
   return (

@@ -17,7 +17,7 @@ const Success = () => {
   const [paymentData, setPaymentData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/getpaymentdata")
+    fetch("https://e-commerce-9u9h.onrender.com/getpaymentdata")
       .then((res) => res.json())
       .then((data) => setPaymentData(data));
     console.log(paymentData);

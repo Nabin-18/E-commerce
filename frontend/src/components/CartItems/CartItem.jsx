@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "../CartItems/CartItem.css";
 import { useContext } from "react";
 import { ShopContext } from "../../context/Context";
 import remove_icon from "../Assets/cart_cross_icon.png";
 import axios from "axios";
-import {loadStripe} from "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 export const CartItem = () => {
   const {
@@ -17,19 +17,24 @@ export const CartItem = () => {
   } = useContext(ShopContext);
 
   //Cart items in array format
-  const cartItemsArray = all_product.filter(item => cartItems[item.id]>0).map(item => ({
-    ...item,
-    quantity: cartItems[item.id],
-  }));
+  const cartItemsArray = all_product
+    .filter((item) => cartItems[item.id] > 0)
+    .map((item) => ({
+      ...item,
+      quantity: cartItems[item.id],
+    }));
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/getcartdata", {
-          headers: {
-            "auth-token": `${localStorage.getItem("auth-token")}`,
-          },
-        });
+        const res = await axios.get(
+          "https://e-commerce-9u9h.onrender.com/getcartdata",
+          {
+            headers: {
+              "auth-token": `${localStorage.getItem("auth-token")}`,
+            },
+          }
+        );
 
         if (res && res.data) {
           setCartItems(res.data); // Update the context with fetched cart data
@@ -43,24 +48,29 @@ export const CartItem = () => {
   }, [setCartItems]);
   //payment integration
   const handlePayment = async () => {
-    const stripe = await loadStripe ("pk_test_51PxtJ5RqdVllZqdPqsENBptu8e88VvJcCxEfVrdO7v1Ay3KNhyZisT0U6Z9VD3LgNLkgkelDva16sDEy6krC9VeN00nNHJ3jPI");
+    const stripe = await loadStripe(
+      "pk_test_51PxtJ5RqdVllZqdPqsENBptu8e88VvJcCxEfVrdO7v1Ay3KNhyZisT0U6Z9VD3LgNLkgkelDva16sDEy6krC9VeN00nNHJ3jPI"
+    );
 
     const body = {
       products: cartItemsArray,
-    }
+    };
     const headers = {
       "Content-Type": "application/json",
-    }
-    const response = await fetch("http://localhost:4000/api/create-checkout-session",{
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify(body),
-    });
+    };
+    const response = await fetch(
+      "https://e-commerce-9u9h.onrender.com/api/create-checkout-session",
+      {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body),
+      }
+    );
     const session = await response.json();
 
     const result = await stripe.redirectToCheckout({
       sessionId: session.id,
-    })
+    });
   };
   return (
     <div className="cartitems">

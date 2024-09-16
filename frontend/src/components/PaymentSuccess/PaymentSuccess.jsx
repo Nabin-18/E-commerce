@@ -1,29 +1,38 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('PaymentSuccess component mounted');
+    console.log("PaymentSuccess component mounted");
     const checkPaymentStatus = async () => {
-      const sessionId = new URLSearchParams(window.location.search).get('session_id');
-      
+      const sessionId = new URLSearchParams(window.location.search).get(
+        "session_id"
+      );
+
       try {
-        const response = await axios.get(`http://localhost:4000/success?session_id=${sessionId}&token=${localStorage.getItem('auth-token')}`);
-        
+        const response = await axios.get(
+          `https://e-commerce-9u9h.onrender.com/success?session_id=${sessionId}&token=${localStorage.getItem(
+            "auth-token"
+          )}`
+        );
+
         if (response.data.success) {
           // Redirect to success page
-          navigate('/success');
+          navigate("/success");
         } else {
           // Handle failure or error cases
-          console.error('Error fetching payment details:', response.data.message);
-          navigate('/cancel');  // Redirect to an error page if needed
+          console.error(
+            "Error fetching payment details:",
+            response.data.message
+          );
+          navigate("/cancel"); // Redirect to an error page if needed
         }
       } catch (error) {
-        console.error('Error retrieving payment status:', error);
-        navigate('/error');
+        console.error("Error retrieving payment status:", error);
+        navigate("/error");
       }
     };
 
